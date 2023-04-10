@@ -1,13 +1,15 @@
 {
-  "dependencies": {
-    "@shopify/hydrogen-react": "^2023.1.7"
-  },
   "name": "uppromote-hydrogen-app",
   "version": "1.0.0",
   "description": "UpPromote Shopify App - Hydrogen",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
+
+  "dependencies": {
+    "@shopify/hydrogen-react": "^2023.1.7"
+  },
+
   "devDependencies": {
     "@types/react": "^18.0.33",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
@@ -29,7 +31,7 @@
     "prepare": "npm run build"
   },
   "author": "Tiendungkid",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tiendungkid/uppromote-hydrogen-app.git"
@@ -38,5 +40,12 @@
     "dist",
     "LICENSE",
     "README.md"
+  ],
+  "keywords": [
+    "uppromote",
+    "uppromote hydrogen",
+    "uppromote react",
+    "uppromote shopify",
+    "uppromote affiliate marketinh hydrogen"
   ]
 }
