@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "@shopify/hydrogen-react": "^2023.1.7"
+  },
+  "name": "uppromote-hydrogen-app",
+  "version": "1.0.0",
+  "description": "UpPromote Shopify App - Hydrogen",
+  "main": "index.ts",
+  "devDependencies": {
+    "@types/react": "^18.0.33",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.0.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC"
+}
