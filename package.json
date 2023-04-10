@@ -1,6 +1,6 @@
 {
-  "name": "uppromote-hydrogen-app",
-  "version": "1.0.0",
+  "name": "uppromote-hydrogen",
+  "version": "0.0.1",
   "description": "UpPromote Shopify App - Hydrogen",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
