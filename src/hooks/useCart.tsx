@@ -13,7 +13,7 @@ export function useCart() {
 			.then(setCart)
 			.catch(() => setCart(null))
 		resolved.current = true
-	}, [root.data.cartPromise, setCart])
+	}, [root.data?.cartPromise, setCart])
 
 	return cart
 }
