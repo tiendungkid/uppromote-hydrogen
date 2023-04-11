@@ -8,7 +8,7 @@ export default function UpPromoteCoreTacking() {
 	const [root]  = useMatches()
 	const handleOnCardLoaded = useCallback((cart: CartType) => {
 		console.log('Uppromote loaded cart', cart?.id)
-	}, [root])
+	}, [root.data.cartPromise])
 	return (
 		<Await resolve={root.data?.cartPromise}>
 			{
