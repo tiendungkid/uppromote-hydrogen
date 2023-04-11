@@ -1,10 +1,22 @@
-import React, {useEffect} from 'react'
-import {useCart} from '../../hooks/useCart'
+import React, {useEffect, useState} from 'react'
+import {Await, useMatches} from '@remix-run/react'
 
 export default function UpPromoteCoreTacking() {
-	const cart = useCart()
+	const [root] = useMatches()
+	const [cart, setCart] = useState()
+
 	useEffect(() => {
-		console.log('Uppromote loaded cart', cart)
-	}, [cart])
-	return <></>
+		console.log(cart)
+	}, [root, cart])
+
+	return (
+		<Await resolve={root.data?.cartPromise}>
+			{
+				(cart) => {
+					setCart(cart)
+					return <div>Uppromote loaded</div>
+				}
+			}
+		</Await>
+	)
 }
