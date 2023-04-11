@@ -9,7 +9,7 @@ export function useCart() {
 
 	useEffect(() => {
 		if (resolved.current) return
-		root.data.cartPromise
+		root.data?.cartPromise
 			.then(setCart)
 			.catch(() => setCart(null))
 		resolved.current = true
