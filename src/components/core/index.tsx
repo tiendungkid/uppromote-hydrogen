@@ -1,22 +1,14 @@
-import React, {useEffect, useState} from 'react'
-import {Await, useMatches} from '@remix-run/react'
+import React from 'react'
+import {Cart} from '@shopify/hydrogen/dist/storefront-api-types'
 
-export default function UpPromoteCoreTacking() {
-	const [root] = useMatches()
-	const [cart, setCart] = useState()
+interface Props {
+    cart: Cart | null | undefined
+}
 
-	useEffect(() => {
-		console.log(cart)
-	}, [root, cart])
-
+export default function UpPromoteCoreTacking(props: Props) {
+	const {cart} = props
+	console.log('Uppromote loaded', cart)
 	return (
-		<Await resolve={root.data?.cartPromise}>
-			{
-				(cart) => {
-					setCart(cart)
-					return <div>Uppromote loaded</div>
-				}
-			}
-		</Await>
+		<div>Uppromote loaded</div>
 	)
 }
