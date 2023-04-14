@@ -1,8 +1,7 @@
 import React from 'react'
-import {Cart} from '@shopify/hydrogen/dist/storefront-api-types'
 
 interface Props {
-    cart: Cart | null | undefined
+    cart: any
 }
 
 export default function UpPromoteCoreTacking(props: Props) {
