@@ -1,7 +1,7 @@
 import invariant from 'tiny-invariant'
 import {Cart} from '@shopify/hydrogen/dist/storefront-api-types'
 import {CART_QUERY} from '../queries/cart'
-import {AppLoadContext} from '../../remix.env'
+import {type AppLoadContext} from '@shopify/remix-oxygen'
 
 export async function uppromoteGetCart({storefront}: AppLoadContext, cartId: string) {
 
