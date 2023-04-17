@@ -1,13 +1,31 @@
-import React from 'react'
+import React, {useCallback} from 'react'
+import {
+	defer,
+	type LoaderArgs,
+} from '@remix-run/server-runtime'
+import {uppromoteGetCart} from '../../utils/fetcher'
+import {Await, useLoaderData} from '@remix-run/react'
+import {Cart} from '@shopify/hydrogen/dist/storefront-api-types'
 
-interface Props {
-    cart: any
+export async function loader({context}: LoaderArgs) {
+	const cartId = await context.session.get('cartId')
+
+	return defer({
+		cartPromise: cartId ? await uppromoteGetCart(context, cartId) : undefined,
+	})
 }
 
-export default function UpPromoteCoreTacking(props: Props) {
-	const {cart} = props
-	console.log('Uppromote loaded', cart)
+export default function Uppromote() {
+	const {cartPromise} = useLoaderData<typeof loader>()
+	const resolveCart = useCallback((cart: Cart | undefined | null) => {
+		console.log(cart)
+	}, [cartPromise])
 	return (
-		<div>Uppromote loaded</div>
+		<Await resolve={cartPromise}>
+			{(cart) => {
+				resolveCart(cart)
+				return <></>
+			}}
+		</Await>
 	)
 }
