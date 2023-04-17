@@ -5,20 +5,19 @@ import {
 } from '@remix-run/server-runtime'
 import {uppromoteGetCart} from '../../utils/fetcher'
 import {Await, useLoaderData} from '@remix-run/react'
-import {Cart} from '@shopify/hydrogen/dist/storefront-api-types'
 
 export async function loader({context}: LoaderArgs) {
 	const cartId = await context.session.get('cartId')
 
 	return defer({
-		cartPromise: cartId ? await uppromoteGetCart(context, cartId) : undefined,
+		cartPromise: cartId ? uppromoteGetCart(context, cartId) : undefined,
 	})
 }
 
 export default function Uppromote() {
 	const {cartPromise} = useLoaderData<typeof loader>()
-	const resolveCart = useCallback((cart: Cart | undefined | null) => {
-		console.log(cart)
+	const resolveCart = useCallback((cart: any) => {
+		console.log('Uppromote tracking', cart)
 	}, [cartPromise])
 	return (
 		<Await resolve={cartPromise}>
