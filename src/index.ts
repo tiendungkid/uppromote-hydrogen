@@ -1,3 +1,3 @@
-import UpPromoteCoreTacking from './components/core'
+import Uppromote from './components/core'
 
-export {UpPromoteCoreTacking}
+export {Uppromote}
