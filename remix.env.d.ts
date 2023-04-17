@@ -6,3 +6,4 @@ declare module '@shopify/remix-oxygen' {
         session: Session
     }
 }
+export {}
