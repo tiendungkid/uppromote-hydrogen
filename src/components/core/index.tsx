@@ -1,8 +1,11 @@
 import React from 'react'
-import {useCart} from '@shopify/hydrogen-react'
+import {Cart} from '@shopify/hydrogen/dist/storefront-api-types'
 
-export default function Uppromote() {
-	const {id} = useCart()
-	console.log('Uppromote hydrogen', id)
+interface Props {
+    cart?: Cart
+}
+
+export default function Uppromote(props: Props) {
+	console.log(props.cart)
 	return <></>
 }
