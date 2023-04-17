@@ -1,5 +1,5 @@
 import React from 'react'
-import {Cart} from '@shopify/hydrogen/dist/storefront-api-types'
+import {Cart} from '@shopify/hydrogen-react'
 
 interface Props {
     cart?: Cart
