@@ -16,3 +16,8 @@ export async function getCart(storefront: Storefront, cartId: string) {
 
 	return cart
 }
+
+export function getCartIdByGraphqlId(id?: string): string| null {
+	if (!id) return null
+	return id.replace('gid://shopify/Cart/', '')
+}
