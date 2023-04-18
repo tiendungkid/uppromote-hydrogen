@@ -2,10 +2,11 @@ import React from 'react'
 import {Cart} from '@shopify/hydrogen-react'
 
 interface Props {
-    cart?: Cart
+    cart?: Cart | null | any
 }
 
 export default function Uppromote(props: Props) {
-	console.log(props.cart)
+	if (props.cart)
+		console.log('UpPromote loaded cart', props.cart)
 	return <></>
 }
