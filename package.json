@@ -11,7 +11,6 @@
   "devDependencies": {
     "@shopify/hydrogen": "^2023.1.6",
     "@shopify/remix-oxygen": "^1.0.4",
-
     "@types/react": "^18.0.33",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
@@ -23,7 +22,7 @@
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
-    "react": "^16|| ^17 || ^18"
+    "react": "^16 | ^17 | ^18"
   },
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
