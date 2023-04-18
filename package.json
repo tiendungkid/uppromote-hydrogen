@@ -22,7 +22,8 @@
     "typescript": "^5.0.4"
   },
   "peerDependencies": {
-    "react": "^16 | ^17 | ^18"
+    "react": "^16 || ^17 || ^18",
+    "react-dom": "^16 || ^17 || ^18"
   },
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
