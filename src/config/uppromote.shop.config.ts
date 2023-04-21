@@ -3,7 +3,7 @@ import * as shopConfig from '../uppromote.shop.config.json'
 
 
 export const uppromoteShopConfig: IUppromoteShopConfig = {
-	uuid: shopConfig.UUID,
+	uuid: shopConfig.storefrontAccessToken,
 	shopDomain: shopConfig.storeDomain,
 	registerPath: shopConfig.registerPath
 }

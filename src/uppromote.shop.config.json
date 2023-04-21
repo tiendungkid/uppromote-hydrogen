@@ -1,5 +1,5 @@
 {
-  "UUID": "",
+  "storefrontAccessToken": "",
   "storeDomain": "tiendungkid.myshopify.com",
   "registerPath": "/account/register"
 }
