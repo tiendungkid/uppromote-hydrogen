@@ -1,5 +1,6 @@
 import * as config from '../uppromote.shop.config.json'
 import ReferralLinkParams from '../types/referral-link-params'
+import {uppromoteShopConfig} from '../config/uppromote.shop.config'
 
 export default class UppromoteLink {
 	private readonly hashCodeParamName: string = 'sca_ref'
@@ -19,12 +20,35 @@ export default class UppromoteLink {
 		)
 	}
 
-	getDecodedReferralLink(): ReferralLinkParams {
-		return {
-			aid: this.getAffiliateId(),
-			hc: this.getHashCode(),
-			s: 'tiendungkid.myshopify.com'
+	getSource() {
+		return this.url.searchParams.get('sca_source')
+	}
+
+	getDecodedReferralLink(): ReferralLinkParams | null {
+		const [
+			aid,
+			hc,
+			s,
+			ug,
+			tid,
+			sca_source
+		] = [
+			this.getAffiliateId(),
+			this.getHash(),
+			uppromoteShopConfig.shopDomain,
+			this.getUserAgent(),
+			null,
+			this.getSource()
+		]
+		if (aid && hc && s) return {
+			aid,
+			hc,
+			s,
+			ug,
+			tid,
+			sca_source
 		}
+		return null
 	}
 
 	getUserAgent(): string {

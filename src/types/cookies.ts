@@ -8,7 +8,7 @@ interface LocalTrackingVariables {
     hashcode: string
     clickTime: string | number
     affiliateId: string | number
-    source?: string
+    source: string | null
 }
 
 interface ReceivedTrackingVariables {
