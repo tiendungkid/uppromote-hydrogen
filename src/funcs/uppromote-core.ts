@@ -13,8 +13,6 @@ export default class UppromoteCore {
 	protected readonly uppromoteApi: UppromoteApi
 	protected cart?: Cart
 
-	// private readonly uppromoteApi: UppromoteApi
-
 	constructor() {
 		this.uppromoteLink = new UppromoteLink
 		this.uppromoteCookie = new UppromoteCookie

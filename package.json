@@ -2,6 +2,13 @@
   "name": "uppromote-hydrogen",
   "version": "0.0.1",
   "description": "UpPromote Shopify App - Hydrogen",
+  "type": "module",
+  "author": "Tiendungkid",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tiendungkid/uppromote-hydrogen/issues",
+    "email": "support@secomapp.com"
+  },
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
@@ -33,8 +40,6 @@
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
     "prepare": "npm run build"
   },
-  "author": "Tiendungkid",
-  "license": "MIT",
   "files": [
     "dist",
     "LICENSE",

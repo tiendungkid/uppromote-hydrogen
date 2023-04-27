@@ -8,7 +8,7 @@
     "node_modules"
   ],
   "compilerOptions": {
-    "module": "esnext",
+    "module": "ES6",
     "lib": [
       "dom",
       "esnext"
