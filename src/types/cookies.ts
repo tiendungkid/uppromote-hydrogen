@@ -5,9 +5,11 @@ enum Received {
 
 interface LocalTrackingVariables {
     received: Received
+    affiliateId: string | number
     hashcode: string
     clickTime: string | number
-    affiliateId: string | number
+    trackingId: string | number | null
+    useragent: string | null
     source: string | null
 }
 

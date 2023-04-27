@@ -42,12 +42,14 @@ export default class UppromoteCore {
 		const variables = this.uppromoteLink.getDecodedReferralLink()
 		if (!variables) return null
 		const clickTime = new Date().getTime()
-		const localTrackingVars = {
+		const localTrackingVars: LocalTrackingVariables = {
+			received: Received.NO,
 			affiliateId: variables.aid,
 			hashcode: variables.hc,
-			source: variables.sca_source,
 			clickTime,
-			received: Received.NO
+			source: variables.sca_source,
+			trackingId: null,
+			useragent: this.uppromoteLink.getUserAgent()
 		}
 		this.uppromoteCookie.setLocalTrackingReceivedVariables(localTrackingVars)
 		return localTrackingVars
