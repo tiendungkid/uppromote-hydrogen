@@ -35,6 +35,6 @@ export default class UppromoteHelpers {
 	mustPostClickTracking(lastClick: string | null): boolean {
 		if (!lastClick) return true
 		const currentTime = new Date().getTime()
-		return (currentTime - parseInt(lastClick)) > (60 * 10)
+		return (currentTime - parseInt(lastClick)) > (60 * 1000)
 	}
 }
