@@ -36,7 +36,7 @@ export default class UppromoteCookie {
 		this.cookieService.remove(cName)
 	}
 
-	setLocalTrackingReceivedVariables(vars: LocalTrackingVariables): void {
+	setLocalTrackingVariables(vars: LocalTrackingVariables): void {
 		this.set(COOKIE_RECEIVED, vars.received)
 		this.set(COOKIE_AFFILIATE_ID, vars.affiliateId.toString())
 		this.set(COOKIE_AFFILIATE_HASHCODE, vars.hashcode)
@@ -46,7 +46,7 @@ export default class UppromoteCookie {
 		}
 	}
 
-	setReceivedVariables(vars: ReceivedTrackingVariables): void {
+	setReceivedTrackingVariables(vars: ReceivedTrackingVariables): void {
 		this.set(COOKIE_RECEIVED, vars.received)
 		this.set(COOKIE_TRACKING_ID, vars.trackingId.toString())
 		this.set(COOKIE_EXPIRES_TIME, (vars.expire * 1000).toString())

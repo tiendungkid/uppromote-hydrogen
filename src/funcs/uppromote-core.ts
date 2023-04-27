@@ -5,6 +5,7 @@ import {LocalTrackingVariables, Received} from '../types/cookies'
 import UppromoteHelpers from './uppromote-helpers'
 import {COOKIE_CLICK_TIME} from '../constants/cookie'
 import UppromoteApi from './uppromote-api'
+import TrackingAffiliateResponse, {TrackingAffiliateResponseStatus} from '../types/tracking-affiliate-response'
 
 export default class UppromoteCore {
 	private readonly uppromoteCookie: UppromoteCookie
@@ -24,6 +25,7 @@ export default class UppromoteCore {
 		if (this.uppromoteLink.isReferralLink()) {
 			const lastClick = this.uppromoteCookie.get(COOKIE_CLICK_TIME)
 			const mustPostClickTracking = this.uppromoteHelper.mustPostClickTracking(lastClick)
+			this.logger('Must post click tracking ' + mustPostClickTracking)
 			if (mustPostClickTracking) {
 				const trackingVars = this.storeLocalTrackingVariables()
 				trackingVars && this.postClickTracking(trackingVars)
@@ -49,7 +51,7 @@ export default class UppromoteCore {
 			trackingId: null,
 			useragent: this.uppromoteLink.getUserAgent()
 		}
-		this.uppromoteCookie.setLocalTrackingReceivedVariables(localTrackingVars)
+		this.uppromoteCookie.setLocalTrackingVariables(localTrackingVars)
 		return localTrackingVars
 	}
 
@@ -57,16 +59,39 @@ export default class UppromoteCore {
 		this.uppromoteApi.postClickTracking(
 			trackingVars,
 			(response) => {
-				console.log('Tracking response ', response)
+				this.uppromoteCookie.setReceivedTrackingVariables({
+					received: Received.YES,
+					cookieDays: response.affcookie,
+					trackingId: response.tid,
+					affiliateName: response.afd.affiliate_name,
+					affiliateFirstName: response.afd.affiliate_firstname,
+					affiliateCompany: response.afd.company,
+					enableAssignDownLine: response.enable_assign_down_line,
+					affiliatePersonalDetail: response.afd.personal_detail,
+					expire: response.ep
+				})
+				this.dispatchTrackingAffiliate(
+					response.status === TrackingAffiliateResponseStatus.SUCCESS,
+					response
+				)
 			},
 			(error) => {
-				this.logger(error)
+				this.logger('[Tracking affiliate] Start log error.')
+				console.log(error)
+				this.logger('[Tracking affiliate] Finish log error.')
 			}
 		)
 	}
 
 	protected resolveCartToken() {
 		console.log('Uppromote cart', this.cart)
+	}
+
+	dispatchTrackingAffiliate(
+		affiliateAvailable: boolean,
+		response: TrackingAffiliateResponse
+	) {
+		console.log(affiliateAvailable, response)
 	}
 
 	public logger(content: any) {

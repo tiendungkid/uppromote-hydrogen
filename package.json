@@ -13,8 +13,7 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "dependencies": {
-    "tiny-invariant": "^1.2.0",
-    "universal-cookie": "^4.0.4"
+    "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {
     "@shopify/hydrogen": "^2023.1.6",
@@ -31,7 +30,8 @@
   },
   "peerDependencies": {
     "react": "^16 || ^17 || ^18",
-    "react-dom": "^16 || ^17 || ^18"
+    "react-dom": "^16 || ^17 || ^18",
+    "universal-cookie": "^4.0.4"
   },
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
