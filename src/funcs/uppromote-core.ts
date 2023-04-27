@@ -21,11 +21,9 @@ export default class UppromoteCore {
 	}
 
 	public run() {
-		this.logger(this.uppromoteLink.isReferralLink())
 		if (this.uppromoteLink.isReferralLink()) {
 			const lastClick = this.uppromoteCookie.get(COOKIE_CLICK_TIME)
 			const mustPostClickTracking = this.uppromoteHelper.mustPostClickTracking(lastClick)
-			this.logger('Must post click tracking ' + mustPostClickTracking)
 			if (mustPostClickTracking) {
 				const trackingVars = this.storeLocalTrackingVariables()
 				trackingVars && this.postClickTracking(trackingVars)
@@ -59,7 +57,7 @@ export default class UppromoteCore {
 		this.uppromoteApi.postClickTracking(
 			trackingVars,
 			(response) => {
-				this.logger(response)
+				console.log('Tracking response ', response)
 			},
 			(error) => {
 				this.logger(error)
@@ -74,7 +72,7 @@ export default class UppromoteCore {
 	public logger(content: any) {
 		console.log(
 			`%c ► UpPromote Affiliate Marketing [Application] - ${content}`,
-			'background-color: #092C4C; color: #fff; padding: 5px;'
+			'background-color: #1D85E8; color: #fff; padding: 5px;'
 		)
 	}
 }
