@@ -2,13 +2,13 @@ import {LocalTrackingVariables} from '../types/cookies'
 import TrackingAffiliateResponse from '../types/tracking-affiliate-response'
 import {uppromoteAppConfig} from '../config/uppromote.app.config'
 import {uppromoteShopConfig} from '../config/uppromote.shop.config'
+import {AffiliateCouponResponse} from '../types/response'
 
 export default class UppromoteApi {
 
 	protected getFullLinkByPath(path: string): string {
-		const config = uppromoteAppConfig()
 		const slashed = path.charAt(0) === '/' ? '' : '/'
-		return config.vars.appUrl + slashed + path
+		return uppromoteAppConfig.vars.appUrl + slashed + path
 	}
 
 	protected async fetcher(
@@ -20,13 +20,17 @@ export default class UppromoteApi {
 	) {
 		const uri = new URL(url)
 		if (['GET', 'HEAD'].includes(method)) {
-			Object.keys(body).forEach(k => body[k] && uri.searchParams.set(k, body[k] || ''))
-			const response = await fetch(url.toString())
+			Object.keys(body).forEach(k => {
+				if (body[k]) uri.searchParams.set(k, body[k] || '')
+			})
+			const requestUrl = uri.toString()
+			const response = await fetch(requestUrl)
 			return (await response.json()) || null
 		}
 		const formData = new FormData()
 		Object.keys(body).forEach(k => body[k] && formData.append(k, body[k] || ''))
-		const response = await fetch(url.toString(), {
+		const requestUrl = uri.toString()
+		const response = await fetch(requestUrl, {
 			method,
 			headers: {},
 			body: formData
@@ -51,5 +55,21 @@ export default class UppromoteApi {
 			})
 			.then(onSuccess)
 			.catch(onError)
+	}
+
+	public async getCoupon(affiliateId: number | string): Promise<AffiliateCouponResponse> {
+		const response = await this.fetcher(
+			this.getFullLinkByPath('api/get_coupon'),
+			'GET',
+			{
+				aid: String(affiliateId),
+				shopify_domain: uppromoteShopConfig.shopDomain
+			}
+		)
+		return await response
+	}
+
+	public async postCartToken() {
+
 	}
 }

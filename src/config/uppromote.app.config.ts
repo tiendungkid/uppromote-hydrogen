@@ -1,7 +1,7 @@
 import {IUppromoteAppConfig, UPPROMOTE_ENV} from '../types/config'
 import * as appConfig from './../uppromote.app.config.json'
 
-export const uppromoteAppConfig = (): IUppromoteAppConfig => {
+export const getConfig = (): IUppromoteAppConfig => {
 	const configs: { [key in UPPROMOTE_ENV]: IUppromoteAppConfig } = {
 		dev: {
 			env: UPPROMOTE_ENV.DEV,
@@ -24,3 +24,5 @@ export const uppromoteAppConfig = (): IUppromoteAppConfig => {
 	}
 	return configs[appConfig.env as UPPROMOTE_ENV]
 }
+
+export const uppromoteAppConfig = getConfig()

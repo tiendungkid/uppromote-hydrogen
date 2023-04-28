@@ -3,7 +3,7 @@ import {LocalTrackingVariables, ReceivedTrackingVariables} from '../types/cookie
 import {
 	COOKIE_AFFILIATE_COMPANY, COOKIE_AFFILIATE_FIRST_NAME,
 	COOKIE_AFFILIATE_HASHCODE,
-	COOKIE_AFFILIATE_ID, COOKIE_AFFILIATE_NAME, COOKIE_AFFILIATE_PERSONAL_DETAIL,
+	COOKIE_AFFILIATE_ID, COOKIE_AFFILIATE_NAME, COOKIE_AFFILIATE_PERSONAL_DETAIL, COOKIE_APPLIED_COUPON,
 	COOKIE_CLICK_SOURCE,
 	COOKIE_CLICK_TIME, COOKIE_ENABLE_ASSIGN_DOWN_LINE, COOKIE_EXPIRES_TIME,
 	COOKIE_RECEIVED, COOKIE_TRACKING_ID
@@ -57,5 +57,15 @@ export default class UppromoteCookie {
 		if (vars.enableAssignDownLine) {
 			this.set(COOKIE_ENABLE_ASSIGN_DOWN_LINE, '1', vars.cookieDays)
 		}
+	}
+
+	setAppliedCoupon(coupon: string | null, applied: boolean){
+		this.set(
+			COOKIE_APPLIED_COUPON,
+			JSON.stringify({
+				coupon,
+				applied
+			})
+		)
 	}
 }

@@ -3,9 +3,10 @@ import UppromoteLink from './uppromote-link'
 import {Cart} from '@shopify/hydrogen-react'
 import {LocalTrackingVariables, Received} from '../types/cookies'
 import UppromoteHelpers from './uppromote-helpers'
-import {COOKIE_CLICK_TIME} from '../constants/cookie'
+import {COOKIE_CLICK_TIME, COOKIE_UPPROMOTE_CART_TOKEN} from '../constants/cookie'
 import UppromoteApi from './uppromote-api'
 import TrackingAffiliateResponse, {TrackingAffiliateResponseStatus} from '../types/tracking-affiliate-response'
+import {getCartIdByGraphqlId} from '../utils/cart'
 
 export default class UppromoteCore {
 	private readonly uppromoteCookie: UppromoteCookie
@@ -25,7 +26,6 @@ export default class UppromoteCore {
 		if (this.uppromoteLink.isReferralLink()) {
 			const lastClick = this.uppromoteCookie.get(COOKIE_CLICK_TIME)
 			const mustPostClickTracking = this.uppromoteHelper.mustPostClickTracking(lastClick)
-			this.logger('Must post click tracking ' + mustPostClickTracking)
 			if (mustPostClickTracking) {
 				const trackingVars = this.storeLocalTrackingVariables()
 				trackingVars && this.postClickTracking(trackingVars)
@@ -33,9 +33,23 @@ export default class UppromoteCore {
 		}
 	}
 
-	setCart(cart: Cart | undefined) {
+	public setCart(cart: Cart | undefined) {
 		this.cart = cart
-		this.resolveCartToken()
+		const cartId = getCartIdByGraphqlId(cart?.id)
+		if (!cartId) return
+		this.resolveCartToken(cartId)
+	}
+
+	protected resolveCartToken(cartToken: string) {
+		console.log('Uppromote cart', this.cart, cartToken)
+		const uppromoteCartToken = this.uppromoteCookie.get(COOKIE_UPPROMOTE_CART_TOKEN)
+		if (!uppromoteCartToken) return
+	}
+
+	protected postCartToken(shopifyCartToken: string | null) {
+		if (!shopifyCartToken) return
+		if (!this.uppromoteHelper.needPostCartToken(shopifyCartToken)) return
+		console.log(shopifyCartToken)
 	}
 
 	protected storeLocalTrackingVariables(): LocalTrackingVariables | null {
@@ -55,49 +69,74 @@ export default class UppromoteCore {
 		return localTrackingVars
 	}
 
-	postClickTracking(trackingVars: LocalTrackingVariables) {
+	protected postClickTracking(trackingVars: LocalTrackingVariables) {
 		this.uppromoteApi.postClickTracking(
 			trackingVars,
 			(response) => {
-				this.uppromoteCookie.setReceivedTrackingVariables({
-					received: Received.YES,
-					cookieDays: response.affcookie,
-					trackingId: response.tid,
-					affiliateName: response.afd.affiliate_name,
-					affiliateFirstName: response.afd.affiliate_firstname,
-					affiliateCompany: response.afd.company,
-					enableAssignDownLine: response.enable_assign_down_line,
-					affiliatePersonalDetail: response.afd.personal_detail,
-					expire: response.ep
-				})
+				const trackingStatus = response.status === TrackingAffiliateResponseStatus.SUCCESS
+					? TrackingAffiliateResponseStatus.SUCCESS
+					: TrackingAffiliateResponseStatus.FAILED
 				this.dispatchTrackingAffiliate(
-					response.status === TrackingAffiliateResponseStatus.SUCCESS,
+					trackingVars.affiliateId,
+					trackingStatus,
 					response
 				)
 			},
 			(error) => {
-				this.logger('[Tracking affiliate] Start log error.')
-				console.log(error)
-				this.logger('[Tracking affiliate] Finish log error.')
+				this.dispatchTrackingAffiliate(
+					trackingVars.affiliateId,
+					TrackingAffiliateResponseStatus.FAILED,
+					error
+				)
+				this.errorLogger(error)
 			}
 		)
 	}
 
-	protected resolveCartToken() {
-		console.log('Uppromote cart', this.cart)
-	}
-
-	dispatchTrackingAffiliate(
-		affiliateAvailable: boolean,
+	protected dispatchTrackingAffiliate(
+		affiliateId: number | string,
+		affiliateAvailable: TrackingAffiliateResponseStatus,
 		response: TrackingAffiliateResponse
-	) {
-		console.log(affiliateAvailable, response)
+	): void {
+		this.logger('Tracking affiliate ' + `(${affiliateId} - ${affiliateAvailable})`)
+		if (affiliateAvailable === TrackingAffiliateResponseStatus.SUCCESS) {
+			this.uppromoteCookie.setReceivedTrackingVariables({
+				received: Received.YES,
+				cookieDays: response.affcookie,
+				trackingId: response.tid,
+				affiliateName: response.afd.affiliate_name,
+				affiliateFirstName: response.afd.affiliate_firstname,
+				affiliateCompany: response.afd.company,
+				enableAssignDownLine: response.enable_assign_down_line,
+				affiliatePersonalDetail: response.afd.personal_detail,
+				expire: response.ep
+			})
+			this.uppromoteApi
+				.getCoupon(affiliateId)
+				.then(r => {
+					this.uppromoteCookie.setAppliedCoupon(
+						r.coupon || null,
+						false
+					)
+				})
+				.catch(e => {
+					this.errorLogger(e)
+					this.uppromoteCookie.setAppliedCoupon(null, false)
+				})
+			return
+		}
 	}
 
 	public logger(content: any) {
 		console.log(
-			`%c ► UpPromote Affiliate Marketing [Application] - ${content}`,
+			`%c ► UpPromote Affiliate Marketing [Application]\n ► ${content}`,
 			'background-color: #1D85E8; color: #fff; padding: 5px;'
 		)
+	}
+
+	public errorLogger(content: any) {
+		this.logger('[Tracking affiliate] Start log error.')
+		console.log(content)
+		this.logger('[Tracking affiliate] Finish log error.')
 	}
 }
