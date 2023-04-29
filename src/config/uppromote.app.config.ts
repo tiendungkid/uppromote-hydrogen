@@ -1,28 +1,20 @@
 import {IUppromoteAppConfig, UPPROMOTE_ENV} from '../types/config'
-import * as appConfig from './../uppromote.app.config.json'
 
-export const getConfig = (): IUppromoteAppConfig => {
-	const configs: { [key in UPPROMOTE_ENV]: IUppromoteAppConfig } = {
+export const APP_ENV = UPPROMOTE_ENV.DEV
+
+export function getConfig(): IUppromoteAppConfig {
+	const configs = {
 		dev: {
-			env: UPPROMOTE_ENV.DEV,
-			vars: {
-				appUrl: appConfig.vars.dev.appUrl
-			}
+			'appUrl': 'https://secomapp-affiliate.test'
 		},
 		test: {
-			env: UPPROMOTE_ENV.TEST,
-			vars: {
-				appUrl: appConfig.vars.test.appUrl
-			}
+			'appUrl': 'https://af-test.uppromote.com'
 		},
 		production: {
-			env: UPPROMOTE_ENV.PRODUCTION,
-			vars: {
-				appUrl: appConfig.vars.production.appUrl
-			}
+			'appUrl': 'https://track.uppromote.com'
 		}
 	}
-	return configs[appConfig.env as UPPROMOTE_ENV]
+	return configs[APP_ENV]
 }
 
 export const uppromoteAppConfig = getConfig()

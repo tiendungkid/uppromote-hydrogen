@@ -1,14 +1,14 @@
 import {LocalTrackingVariables} from '../types/cookies'
 import TrackingAffiliateResponse from '../types/tracking-affiliate-response'
+import {AffiliateCouponResponse} from '../types/response'
 import {uppromoteAppConfig} from '../config/uppromote.app.config'
 import {uppromoteShopConfig} from '../config/uppromote.shop.config'
-import {AffiliateCouponResponse} from '../types/response'
 
 export default class UppromoteApi {
 
 	protected getFullLinkByPath(path: string): string {
 		const slashed = path.charAt(0) === '/' ? '' : '/'
-		return uppromoteAppConfig.vars.appUrl + slashed + path
+		return uppromoteAppConfig.appUrl + slashed + path
 	}
 
 	protected async fetcher(
@@ -49,7 +49,7 @@ export default class UppromoteApi {
 			{
 				aid: String(trackingVars.affiliateId),
 				hc: trackingVars.hashcode,
-				s: uppromoteShopConfig.shopDomain,
+				s: uppromoteShopConfig.shopify.shopDomain,
 				tid: String(trackingVars.trackingId) || null,
 				ug: trackingVars.useragent
 			})
@@ -63,13 +63,13 @@ export default class UppromoteApi {
 			'GET',
 			{
 				aid: String(affiliateId),
-				shopify_domain: uppromoteShopConfig.shopDomain
+				shopify_domain: uppromoteShopConfig.shopify.shopDomain
 			}
 		)
 		return await response
 	}
 
 	public async postCartToken() {
-
+		console.log('Posting cart token...')
 	}
 }

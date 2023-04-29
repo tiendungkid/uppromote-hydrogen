@@ -1,4 +1,3 @@
-import * as config from '../uppromote.shop.config.json'
 import ReferralLinkParams from '../types/referral-link-params'
 import {uppromoteShopConfig} from '../config/uppromote.shop.config'
 
@@ -35,7 +34,7 @@ export default class UppromoteLink {
 		] = [
 			this.getAffiliateId(),
 			this.getHash(),
-			uppromoteShopConfig.shopDomain,
+			uppromoteShopConfig.shopify.shopDomain,
 			this.getUserAgent(),
 			null,
 			this.getSource()
@@ -80,7 +79,7 @@ export default class UppromoteLink {
 	}
 
 	isRegisterPage() {
-		let registerPath = config.registerPath
+		let registerPath = uppromoteShopConfig.shopify.registerPath
 		let currentPath = this.url.pathname
 		registerPath = registerPath.replace(/^\/+/, '').replace(/\/+$/, '')
 		currentPath = currentPath.replace(/^\/+/, '').replace(/\/+$/, '')

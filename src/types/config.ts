@@ -5,14 +5,17 @@ export enum UPPROMOTE_ENV {
 }
 
 export interface IUppromoteAppConfig {
-    env: UPPROMOTE_ENV,
-    vars: {
-        appUrl: string
-    }
+    appUrl: string
 }
 
 export interface IUppromoteShopConfig {
-    uuid: string,
-    shopDomain: string,
-    registerPath: string
+    shopify: {
+        shopDomain: string,
+        registerPath: string,
+        storefrontAccessToken: string
+        storefrontApiVersion: string
+    }
+    app: {
+        access_token: string
+    }
 }
