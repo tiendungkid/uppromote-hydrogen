@@ -2,7 +2,7 @@ import {IUppromoteAppConfig, UPPROMOTE_ENV} from '../types/config'
 
 export const APP_ENV = UPPROMOTE_ENV.DEV
 
-export function getConfig(): IUppromoteAppConfig {
+export function getConfig(env: UPPROMOTE_ENV): IUppromoteAppConfig {
 	const configs = {
 		dev: {
 			'appUrl': 'https://secomapp-affiliate.test'
@@ -14,7 +14,7 @@ export function getConfig(): IUppromoteAppConfig {
 			'appUrl': 'https://track.uppromote.com'
 		}
 	}
-	return configs[APP_ENV]
+	return configs[env]
 }
 
-export const uppromoteAppConfig = getConfig()
+export const uppromoteAppConfig = getConfig(APP_ENV)
