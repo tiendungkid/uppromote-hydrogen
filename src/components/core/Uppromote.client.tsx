@@ -1,4 +1,4 @@
-import React, {startTransition} from 'react'
+import React, {memo, startTransition} from 'react'
 import {Cart} from '@shopify/hydrogen-react'
 import UppromoteCore from '../../funcs/uppromote-core'
 
@@ -6,7 +6,7 @@ interface Props {
     cart?: Cart
 }
 
-export default function Uppromote(props: Props) {
+function Uppromote(props: Props) {
 	const {cart} = props
 	startTransition(() => {
 		if (typeof window !== 'undefined') {
@@ -17,3 +17,4 @@ export default function Uppromote(props: Props) {
 	})
 	return (<></>)
 }
+export default memo(Uppromote)

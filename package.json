@@ -13,10 +13,11 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "dependencies": {
-    "tiny-invariant": "^1.2.0"
+    "tiny-invariant": "^1.2.0",
+    "@shopify/hydrogen-react": "^2023.4.0"
   },
   "devDependencies": {
-    "@shopify/hydrogen": "^2023.1.6",
+    "@shopify/hydrogen": "^2023.4.0",
     "@shopify/remix-oxygen": "^1.0.4",
     "@types/react": "^18.0.33",
     "@typescript-eslint/eslint-plugin": "^5.57.1",

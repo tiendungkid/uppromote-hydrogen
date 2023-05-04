@@ -3,10 +3,16 @@ import UppromoteLink from './uppromote-link'
 import {Cart} from '@shopify/hydrogen-react'
 import {LocalTrackingVariables, Received} from '../types/cookies'
 import UppromoteHelpers from './uppromote-helpers'
-import {COOKIE_CLICK_TIME, COOKIE_UPPROMOTE_CART_TOKEN} from '../constants/cookie'
+import {
+	COOKIE_AFFILIATE_ID, COOKIE_APPLIED_COUPON,
+	COOKIE_CLICK_TIME, COOKIE_EXPIRES_TIME,
+	COOKIE_TRACKING_ID,
+	COOKIE_UPPROMOTE_CART_TOKEN
+} from '../constants/cookie'
 import UppromoteApi from './uppromote-api'
 import TrackingAffiliateResponse, {TrackingAffiliateResponseStatus} from '../types/tracking-affiliate-response'
 import {getCartIdByGraphqlId} from '../utils/cart'
+import AppliedCoupon from '../types/applied-coupon'
 
 export default class UppromoteCore {
 	private readonly uppromoteCookie: UppromoteCookie
@@ -40,16 +46,26 @@ export default class UppromoteCore {
 		this.resolveCartToken(cartId)
 	}
 
-	protected resolveCartToken(cartToken: string) {
-		console.log('Uppromote cart', this.cart, cartToken)
+	protected resolveCartToken(shopifyCartId: string) {
+		const affiliateId = this.uppromoteCookie.get(COOKIE_AFFILIATE_ID)
+		const trackingId = this.uppromoteCookie.get(COOKIE_TRACKING_ID)
+		const expire_at = this.uppromoteCookie.get(COOKIE_EXPIRES_TIME)
 		const uppromoteCartToken = this.uppromoteCookie.get(COOKIE_UPPROMOTE_CART_TOKEN)
-		if (!uppromoteCartToken) return
-	}
-
-	protected postCartToken(shopifyCartToken: string | null) {
-		if (!shopifyCartToken) return
-		if (!this.uppromoteHelper.needPostCartToken(shopifyCartToken)) return
-		console.log(shopifyCartToken)
+		const userAgent = this.uppromoteLink.getUserAgent()
+		if (!trackingId || !affiliateId || !expire_at) return
+		this.applyCouponCode()
+		if (this.uppromoteHelper.needPostCartToken(
+			shopifyCartId,
+			uppromoteCartToken,
+			trackingId,
+			affiliateId,
+			expire_at
+		)) {
+			this.uppromoteCookie.setUppromoteCartId(shopifyCartId)
+			this.uppromoteApi
+				.postCartToken(affiliateId, trackingId, shopifyCartId, userAgent)
+				.then()
+		}
 	}
 
 	protected storeLocalTrackingVariables(): LocalTrackingVariables | null {
@@ -118,6 +134,7 @@ export default class UppromoteCore {
 						r.coupon || null,
 						false
 					)
+					this.applyCouponCode()
 				})
 				.catch(e => {
 					this.errorLogger(e)
@@ -125,6 +142,19 @@ export default class UppromoteCore {
 				})
 			return
 		}
+	}
+
+	protected applyCouponCode() {
+		const couponCookie: AppliedCoupon | null = this.uppromoteCookie.get(COOKIE_APPLIED_COUPON)
+		if (!couponCookie) return
+		if (!couponCookie.coupon || couponCookie.applied) return
+		const uppromoteCartId = this.uppromoteCookie.get(COOKIE_UPPROMOTE_CART_TOKEN)
+		if (!uppromoteCartId) return
+		this.uppromoteApi
+			.applyDiscountCode(uppromoteCartId, couponCookie.coupon)
+			.then(() => {
+				this.uppromoteCookie.setAppliedCoupon(couponCookie.coupon, true)
+			})
 	}
 
 	public logger(content: any) {

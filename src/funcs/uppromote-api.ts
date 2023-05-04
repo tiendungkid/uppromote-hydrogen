@@ -3,6 +3,9 @@ import TrackingAffiliateResponse from '../types/tracking-affiliate-response'
 import {AffiliateCouponResponse} from '../types/response'
 import {uppromoteAppConfig} from '../config/uppromote.app.config'
 import {uppromoteShopConfig} from '../config/uppromote.shop.config'
+import {createStorefrontClient} from '@shopify/hydrogen-react'
+import {CART_DISCOUNT_CODES_UPDATE} from '../queries/cart-discount-codes-update'
+import {getGraphqlIdByCartId} from '../utils/cart'
 
 export default class UppromoteApi {
 
@@ -69,7 +72,56 @@ export default class UppromoteApi {
 		return await response
 	}
 
-	public async postCartToken() {
-		console.log('Posting cart token...')
+	public async postCartToken(
+		affiliateId: string,
+		trackingId: string,
+		cartId: string,
+		userAgent: string
+	) {
+		const response = await this.fetcher(
+			this.getFullLinkByPath('api/ctk'),
+			'POST',
+			{
+				aid: affiliateId,
+				tid: trackingId,
+				ctk: cartId,
+				s: uppromoteShopConfig.shopify.shopDomain.replace('.myshopify.com', ''),
+				ug: userAgent,
+				shopify_domain: uppromoteShopConfig.shopify.shopDomain
+			}
+		)
+		return await response
+	}
+
+	public async applyDiscountCode(cartId: string, discountCode: string) {
+		const storefront = this.getStorefrontClient()
+		const response = await fetch(storefront.getStorefrontApiUrl(), {
+			body: JSON.stringify({
+				query: CART_DISCOUNT_CODES_UPDATE,
+				variables: {
+					cartId: getGraphqlIdByCartId(cartId),
+					discountCodes: [discountCode]
+				}
+			}),
+			headers: storefront.getPublicTokenHeaders(),
+			method: 'POST'
+		})
+		const jsonResponse = await response.json()
+		return await jsonResponse
+	}
+
+	private getStorefrontClient(): {
+        getStorefrontApiUrl: () => string,
+		getPublicTokenHeaders: () => Record<string, string>
+		} {
+		const client = createStorefrontClient({
+			publicStorefrontToken: uppromoteShopConfig.shopify.storefrontAccessToken,
+			storeDomain: `https://${uppromoteShopConfig.shopify.shopDomain}`,
+			storefrontApiVersion: uppromoteShopConfig.shopify.storefrontApiVersion
+		})
+		return {
+			getStorefrontApiUrl: client.getStorefrontApiUrl,
+			getPublicTokenHeaders: client.getPublicTokenHeaders
+		}
 	}
 }

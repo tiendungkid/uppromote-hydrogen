@@ -6,7 +6,7 @@ import {
 	COOKIE_AFFILIATE_ID, COOKIE_AFFILIATE_NAME, COOKIE_AFFILIATE_PERSONAL_DETAIL, COOKIE_APPLIED_COUPON,
 	COOKIE_CLICK_SOURCE,
 	COOKIE_CLICK_TIME, COOKIE_ENABLE_ASSIGN_DOWN_LINE, COOKIE_EXPIRES_TIME,
-	COOKIE_RECEIVED, COOKIE_TRACKING_ID
+	COOKIE_RECEIVED, COOKIE_TRACKING_ID, COOKIE_UPPROMOTE_CART_TOKEN
 } from '../constants/cookie'
 
 export default class UppromoteCookie {
@@ -16,7 +16,7 @@ export default class UppromoteCookie {
 		this.cookieService = new Cookies()
 	}
 
-	get(cName: string): string | null {
+	get(cName: string): string | null | any {
 		return this.cookieService.get(cName)
 	}
 
@@ -59,13 +59,20 @@ export default class UppromoteCookie {
 		}
 	}
 
-	setAppliedCoupon(coupon: string | null, applied: boolean){
+	setAppliedCoupon(coupon: string | null, applied: boolean) {
 		this.set(
 			COOKIE_APPLIED_COUPON,
 			JSON.stringify({
 				coupon,
 				applied
 			})
+		)
+	}
+
+	setUppromoteCartId(cartId: string) {
+		this.set(
+			COOKIE_UPPROMOTE_CART_TOKEN,
+			cartId,
 		)
 	}
 }
