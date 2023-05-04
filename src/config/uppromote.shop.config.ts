@@ -1,18 +1,16 @@
 import {IUppromoteShopConfig} from '../types/config'
-import * as dotenv from 'dotenv'
-
-dotenv.config()
+import * as data from './../uppromote.config.json'
 
 function getShopConfig(): IUppromoteShopConfig {
 	const config: IUppromoteShopConfig = {
 		app: {
-			access_token: process.env.UPPROMOTE_API_KEY || ''
+			access_token: data.uppromote.access_token || ''
 		},
 		shopify: {
-			shopDomain: process.env.PUBLIC_STORE_DOMAIN || '',
-			storefrontAccessToken: process.env.PUBLIC_STOREFRONT_API_TOKEN || '',
-			storefrontApiVersion: process.env.PUBLIC_STOREFRONT_API_VERSION || '',
-			registerPath: process.env.UPPROMOTE_SHOPIFY_REGISTER_PATH || ''
+			shopDomain: data.shopify.shop_domain || '',
+			storefrontAccessToken: data.shopify.storefront_access_token || '',
+			storefrontApiVersion: data.shopify.storefront_api_version || '',
+			registerPath: data.shopify.register_path || ''
 		}
 	}
 	if (!config.app.access_token)
