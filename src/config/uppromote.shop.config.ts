@@ -10,7 +10,6 @@ function getShopConfig(): IUppromoteShopConfig {
 			shopDomain: data.shopify.shop_domain || '',
 			storefrontAccessToken: data.shopify.storefront_access_token || '',
 			storefrontApiVersion: data.shopify.storefront_api_version || '',
-			registerPath: data.shopify.register_path || ''
 		}
 	}
 	if (!config.app.access_token)

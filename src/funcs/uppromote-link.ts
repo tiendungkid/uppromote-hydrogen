@@ -77,12 +77,4 @@ export default class UppromoteLink {
 		if (!Array.isArray(match) || match.length < 1) return null
 		return match[0].replaceAll('.', '')
 	}
-
-	isRegisterPage() {
-		let registerPath = uppromoteShopConfig.shopify.registerPath
-		let currentPath = this.url.pathname
-		registerPath = registerPath.replace(/^\/+/, '').replace(/\/+$/, '')
-		currentPath = currentPath.replace(/^\/+/, '').replace(/\/+$/, '')
-		return registerPath === currentPath
-	}
 }

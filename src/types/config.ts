@@ -11,7 +11,6 @@ export interface IUppromoteAppConfig {
 export interface IUppromoteShopConfig {
     shopify: {
         shopDomain: string,
-        registerPath: string,
         storefrontAccessToken: string
         storefrontApiVersion: string
     }

@@ -5,7 +5,7 @@ import {LocalTrackingVariables, Received} from '../types/cookies'
 import UppromoteHelpers from './uppromote-helpers'
 import {
 	COOKIE_AFFILIATE_ID, COOKIE_APPLIED_COUPON,
-	COOKIE_CLICK_TIME, COOKIE_EXPIRES_TIME,
+	COOKIE_CLICK_TIME, COOKIE_ENABLE_ASSIGN_DOWN_LINE, COOKIE_EXPIRES_TIME,
 	COOKIE_TRACKING_ID,
 	COOKIE_UPPROMOTE_CART_TOKEN
 } from '../constants/cookie'
@@ -140,6 +140,19 @@ export default class UppromoteCore {
 					this.errorLogger(e)
 					this.uppromoteCookie.setAppliedCoupon(null, false)
 				})
+			this.uppromoteApi
+				.getFbPixel(affiliateId)
+				.then(response => {
+					if (response && response.status === 'ok') {
+						const customEvent = new CustomEvent('uppromote:pull-fb-pixel', {
+							detail: {
+								affiliateId,
+								pixel: response.pixel
+							}
+						})
+						window.dispatchEvent(customEvent)
+					}
+				})
 			return
 		}
 	}
@@ -155,6 +168,13 @@ export default class UppromoteCore {
 			.then(() => {
 				this.uppromoteCookie.setAppliedCoupon(couponCookie.coupon, true)
 			})
+	}
+
+	generateParentAffiliate(): string | null {
+		const enableAssignDownLineAffiliate = this.uppromoteCookie.get(COOKIE_ENABLE_ASSIGN_DOWN_LINE)
+		const parentAffiliate = this.uppromoteCookie.get(COOKIE_AFFILIATE_ID)
+		if (!enableAssignDownLineAffiliate || !parentAffiliate) return null
+		return parentAffiliate
 	}
 
 	public logger(content: any) {

@@ -112,8 +112,8 @@ export default class UppromoteApi {
 
 	private getStorefrontClient(): {
         getStorefrontApiUrl: () => string,
-		getPublicTokenHeaders: () => Record<string, string>
-		} {
+        getPublicTokenHeaders: () => Record<string, string>
+        } {
 		const client = createStorefrontClient({
 			publicStorefrontToken: uppromoteShopConfig.shopify.storefrontAccessToken,
 			storeDomain: `https://${uppromoteShopConfig.shopify.shopDomain}`,
@@ -123,5 +123,17 @@ export default class UppromoteApi {
 			getStorefrontApiUrl: client.getStorefrontApiUrl,
 			getPublicTokenHeaders: client.getPublicTokenHeaders
 		}
+	}
+
+	public async getFbPixel(affiliateId: string | number) {
+		const response = await this.fetcher(
+			this.getFullLinkByPath('api/get_fb_pixel'),
+			'GET',
+			{
+				aff_id: String(affiliateId),
+				shop: uppromoteShopConfig.shopify.shopDomain
+			}
+		)
+		return await response
 	}
 }
