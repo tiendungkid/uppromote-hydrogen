@@ -6,12 +6,18 @@ import {uppromoteShopConfig} from '../config/uppromote.shop.config'
 import {createStorefrontClient} from '@shopify/hydrogen-react'
 import {CART_DISCOUNT_CODES_UPDATE} from '../queries/cart-discount-codes-update'
 import {getGraphqlIdByCartId} from '../utils/cart'
+import CustomerReferralSetting from '../types/customer-referral-setting'
 
 export default class UppromoteApi {
 
 	protected getFullLinkByPath(path: string): string {
 		const slashed = path.charAt(0) === '/' ? '' : '/'
 		return uppromoteAppConfig.appUrl + slashed + path
+	}
+
+	protected getFullCdnLinkPath(path: string): string {
+		const slashed = path.charAt(0) === '/' ? '' : '/'
+		return uppromoteAppConfig.cdnHost + slashed + path
 	}
 
 	protected async fetcher(
@@ -133,6 +139,17 @@ export default class UppromoteApi {
 				aff_id: String(affiliateId),
 				shop: uppromoteShopConfig.shopify.shopDomain
 			}
+		)
+		return await response
+	}
+
+	public async getCustomerReferralSetting(): Promise<CustomerReferralSetting> {
+		const currentTime = new Date().getTime()
+		const fileName = uppromoteShopConfig.shopify.shopDomain.replaceAll('.myshopify.com', '') + '.json?v=' + currentTime
+		const response = await this.fetcher(
+			this.getFullCdnLinkPath(`storage/uploads/customer_referral_settings/${fileName}`),
+			'GET',
+			{}
 		)
 		return await response
 	}

@@ -75,4 +75,8 @@ export default class UppromoteCookie {
 			cartId,
 		)
 	}
+
+	isClosedCustomerReferral(): boolean {
+		return !!sessionStorage.getItem('closed_refer_customer')
+	}
 }

@@ -1,3 +1,5 @@
+import {uppromoteAppConfig} from '../config/uppromote.app.config'
+
 export default class UppromoteHelpers {
 	/**
      * @description Only post [Cart Token] when posted [Click Tracking]
@@ -28,5 +30,25 @@ export default class UppromoteHelpers {
 		if (!lastClick) return true
 		const currentTime = new Date().getTime()
 		return (currentTime - parseInt(lastClick)) > (60 * 1000)
+	}
+
+	loadCustomerReferralStyle() {
+		const stylesheetTag = document.createElement('link')
+		stylesheetTag.setAttribute('rel', 'stylesheet')
+		stylesheetTag.setAttribute('href', uppromoteAppConfig.styleUrl)
+		document.head.append(stylesheetTag)
+	}
+
+	public logger(content: any) {
+		console.log(
+			`%c ► UpPromote Affiliate Marketing [Application]\n ► ${content}`,
+			'background-color: #1D85E8; color: #fff; padding: 5px;'
+		)
+	}
+
+	public errorLogger(content: any) {
+		this.logger('[Tracking affiliate] Start log error.')
+		console.log(content)
+		this.logger('[Tracking affiliate] Finish log error.')
 	}
 }

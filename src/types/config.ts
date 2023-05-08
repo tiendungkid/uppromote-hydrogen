@@ -6,6 +6,8 @@ export enum UPPROMOTE_ENV {
 
 export interface IUppromoteAppConfig {
     appUrl: string
+    cdnHost: string
+    styleUrl: string
 }
 
 export interface IUppromoteShopConfig {

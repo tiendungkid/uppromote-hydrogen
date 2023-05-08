@@ -104,7 +104,7 @@ export default class UppromoteCore {
 					TrackingAffiliateResponseStatus.FAILED,
 					error
 				)
-				this.errorLogger(error)
+				this.uppromoteHelper.errorLogger(error)
 			}
 		)
 	}
@@ -114,7 +114,7 @@ export default class UppromoteCore {
 		affiliateAvailable: TrackingAffiliateResponseStatus,
 		response: TrackingAffiliateResponse
 	): void {
-		this.logger('Tracking affiliate ' + `(${affiliateId} - ${affiliateAvailable})`)
+		this.uppromoteHelper.logger('Tracking affiliate ' + `(${affiliateId} - ${affiliateAvailable})`)
 		if (affiliateAvailable === TrackingAffiliateResponseStatus.SUCCESS) {
 			this.uppromoteCookie.setReceivedTrackingVariables({
 				received: Received.YES,
@@ -137,7 +137,7 @@ export default class UppromoteCore {
 					this.applyCouponCode()
 				})
 				.catch(e => {
-					this.errorLogger(e)
+					this.uppromoteHelper.errorLogger(e)
 					this.uppromoteCookie.setAppliedCoupon(null, false)
 				})
 			this.uppromoteApi
@@ -175,18 +175,5 @@ export default class UppromoteCore {
 		const parentAffiliate = this.uppromoteCookie.get(COOKIE_AFFILIATE_ID)
 		if (!enableAssignDownLineAffiliate || !parentAffiliate) return null
 		return parentAffiliate
-	}
-
-	public logger(content: any) {
-		console.log(
-			`%c ► UpPromote Affiliate Marketing [Application]\n ► ${content}`,
-			'background-color: #1D85E8; color: #fff; padding: 5px;'
-		)
-	}
-
-	public errorLogger(content: any) {
-		this.logger('[Tracking affiliate] Start log error.')
-		console.log(content)
-		this.logger('[Tracking affiliate] Finish log error.')
 	}
 }
