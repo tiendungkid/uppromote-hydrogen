@@ -31,6 +31,20 @@ class CustomerReferralRenderer {
 		inviteContainer.append(closeButton, inviteContentContainer)
 		container.append(inviteContainer, button)
 		document.body.append(container)
+		return {
+			container,
+			button,
+			closeButtonIcon,
+			inviteContainer,
+			closeButton,
+			inviteContentContainer,
+			inviteHeader,
+			inviteContent,
+			inputContainer,
+			input,
+			inputAddon,
+			errorText
+		}
 	}
 
 
