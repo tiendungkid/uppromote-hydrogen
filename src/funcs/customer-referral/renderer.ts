@@ -2,6 +2,7 @@ import CustomerReferralSetting, {
 	CustomerReferralDesignSetting,
 	// CustomerReferralProgramSetting
 } from '../../types/customer-referral-setting'
+import CustomerReferralUi from '../../types/customer-referral-ui'
 
 class CustomerReferralRenderer {
 	// private readonly generalSetting: CustomerReferralProgramSetting
@@ -12,7 +13,7 @@ class CustomerReferralRenderer {
 		this.designSetting = setting.design
 	}
 
-	renderCustomerReferral() {
+	renderCustomerReferral(): CustomerReferralUi {
 		const container = this.container()
 		const button = this.button()
 		const closeButtonIcon = this.closeButtonIcon()
@@ -34,16 +35,12 @@ class CustomerReferralRenderer {
 		return {
 			container,
 			button,
-			closeButtonIcon,
+			closeButton: closeButtonIcon,
 			inviteContainer,
-			closeButton,
-			inviteContentContainer,
-			inviteHeader,
-			inviteContent,
-			inputContainer,
-			input,
-			inputAddon,
-			errorText
+			closeInvitePopupButton: closeButton,
+			inviteInput: input as HTMLInputElement,
+			errorText,
+			getInviteLinkButton: inputAddon
 		}
 	}
 

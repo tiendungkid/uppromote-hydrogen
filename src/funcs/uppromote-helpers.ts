@@ -39,14 +39,14 @@ export default class UppromoteHelpers {
 		document.head.append(stylesheetTag)
 	}
 
-	public logger(content: any) {
+	logger(content: any) {
 		console.log(
 			`%c ► UpPromote Affiliate Marketing [Application]\n ► ${content}`,
 			'background-color: #1D85E8; color: #fff; padding: 5px;'
 		)
 	}
 
-	public errorLogger(content: any) {
+	errorLogger(content: any) {
 		this.logger('[Tracking affiliate] Start log error.')
 		console.log(content)
 		this.logger('[Tracking affiliate] Finish log error.')
