@@ -13,11 +13,13 @@ class UppromoteCustomerReferral {
 	protected renderer: CustomerReferralRenderer | undefined
 	protected setting: CustomerReferralSetting | null
 	protected ui: CustomerReferralUi | null
+	protected uiAction: CustomerReferralUIAction | null
 
 	constructor() {
 		this.uppromoteApi = new UppromoteApi()
 		this.uppromoteHelper = new UppromoteHelpers()
 		this.uppromoteCookie = new UppromoteCookie()
+		this.uiAction = null
 		this.setting = null
 		this.ui = null
 	}
@@ -39,7 +41,7 @@ class UppromoteCustomerReferral {
 
 	private addEventListener() {
 		if (!this.ui || !this.setting) return
-		const customerReferralAction = new CustomerReferralUIAction(
+		this.uiAction = new CustomerReferralUIAction(
 			this.setting,
 			this.ui
 		)
@@ -47,24 +49,24 @@ class UppromoteCustomerReferral {
 			{
 				element: this.ui.button,
 				event: 'click',
-				action: () => customerReferralAction.onButtonClicked()
+				action: () => this.uiAction?.onButtonClicked()
 			},
 			{
 				element: this.ui.closeButton,
 				event: 'click',
-				action: () => customerReferralAction.onCloseButton()
+				action: () => this.uiAction?.onCloseButton()
 			},
 			{
 				element: this.ui.closeInvitePopupButton,
 				event: 'click',
-				action: () => customerReferralAction.onButtonClicked()
+				action: () => this.uiAction?.onButtonClicked()
 			},
 			{
 				element: this.ui.getInviteLinkButton,
 				event: 'click',
-				action: () => customerReferralAction.prepareRegister(
-					customerReferralAction.copyInviteLink,
-					() => customerReferralAction.renderErrorMessage('Please enter a valid email address'),
+				action: () => this.uiAction?.prepareRegister(
+					this.uiAction?.copyInviteLink,
+					() => this.uiAction?.renderErrorMessage('Please enter a valid email address'),
 					this.registerCustomer
 				)
 			}
@@ -72,7 +74,8 @@ class UppromoteCustomerReferral {
 		actions.forEach((action) => action.element.addEventListener(action.event, action.action))
 	}
 
-	private registerCustomer(email: string) {
+	private registerCustomer(email: string){
+		if (!this.uiAction) return
 		alert(email)
 	}
 }
