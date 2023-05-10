@@ -75,6 +75,10 @@ class CustomerReferralUIAction {
 		this.ui.errorText.textContent = message
 		this.ui.errorText.style.display = message ? 'block' : 'none'
 	}
+
+	getEmail(): string {
+		return this.ui.inviteInput.value
+	}
 }
 
 export default CustomerReferralUIAction

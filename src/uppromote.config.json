@@ -5,6 +5,6 @@
   "shopify": {
     "shop_domain": "tiendungkid.myshopify.com",
     "storefront_access_token": "2323a8b30a5298a09191327eaa0c9512",
-    "storefront_api_version": "2023-04",
+    "storefront_api_version": "2023-04"
   }
 }
