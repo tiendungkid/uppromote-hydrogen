@@ -40,7 +40,7 @@ class CustomerReferralRenderer {
 			closeInvitePopupButton: closeButton,
 			inviteInput: input as HTMLInputElement,
 			errorText,
-			getInviteLinkButton: inputAddon
+			getInviteLinkButton: inputAddon as HTMLButtonElement
 		}
 	}
 

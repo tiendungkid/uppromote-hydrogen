@@ -11,7 +11,7 @@ export interface CustomerReferralProgramSetting {
         value: string
         price_rule_id: number
         coupon: string
-    }
+    } 
     program: string
 }
 

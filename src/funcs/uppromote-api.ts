@@ -1,6 +1,6 @@
 import {LocalTrackingVariables} from '../types/cookies'
 import TrackingAffiliateResponse from '../types/tracking-affiliate-response'
-import {AffiliateCouponResponse} from '../types/response'
+import {AffiliateCouponResponse, RegisterCustomerReferralResponse} from '../types/response'
 import {uppromoteAppConfig} from '../config/uppromote.app.config'
 import {uppromoteShopConfig} from '../config/uppromote.shop.config'
 import {createStorefrontClient} from '@shopify/hydrogen-react'
@@ -150,6 +150,19 @@ export default class UppromoteApi {
 			this.getFullCdnLinkPath(`storage/uploads/customer_referral_settings/${fileName}`),
 			'GET',
 			{}
+		)
+		return await response
+	}
+
+	public async postRegisterCustomerReferral(email: string): Promise<RegisterCustomerReferralResponse> {
+		const response = await this.fetcher(
+			this.getFullLinkByPath('api/refer-customer/register'),
+			'POST',
+			{
+				email,
+				shop: uppromoteShopConfig.shopify.shopDomain,
+				shopify_domain: uppromoteShopConfig.shopify.shopDomain
+			}
 		)
 		return await response
 	}

@@ -41,6 +41,7 @@ class UppromoteCustomerReferral {
 
 	private addEventListener() {
 		if (!this.ui || !this.setting) return
+		const ui = this.ui
 		const uiAction = new CustomerReferralUIAction(
 			this.setting,
 			this.ui
@@ -48,33 +49,50 @@ class UppromoteCustomerReferral {
 		this.uiAction = uiAction
 		const actions = [
 			{
-				element: this.ui.button,
+				element: ui.button,
 				event: 'click',
 				action: () => uiAction.onButtonClicked()
 			},
 			{
-				element: this.ui.closeButton,
+				element: ui.closeButton,
 				event: 'click',
 				action: () => uiAction.onCloseButton()
 			},
 			{
-				element: this.ui.closeInvitePopupButton,
+				element: ui.closeInvitePopupButton,
 				event: 'click',
 				action: () => uiAction.onButtonClicked()
+			},
+			{
+				element: ui.getInviteLinkButton,
+				event: 'click',
+				action: () => this.prepareRegister()
 			}
 		]
-		this.ui.getInviteLinkButton.addEventListener('click', () => {
-			uiAction.prepareRegister(
-				() => uiAction.copyInviteLink(),
-				() => uiAction.renderErrorMessage('Please enter a valid email address'),
-				this.registerCustomer
-			)
-		})
 		actions.forEach((action) => action.element.addEventListener(action.event, action.action))
 	}
 
-	public registerCustomer(email: string) {
-		alert(email)
+	private prepareRegister() {
+		if (!this.uiAction) return
+		this.uiAction.renderErrorMessage(null)
+		if (this.uiAction.createdCustomer()) {
+			this.uiAction.copyInviteLink()
+			return
+		}
+		if (!this.uiAction.isValidEmail()) {
+			this.uiAction.renderErrorMessage('Please enter a valid email address')
+			return
+		}
+		this.uiAction.disableRegisterButton()
+		const email = this.uiAction.getEmail()
+		this.uppromoteApi
+			.postRegisterCustomerReferral(email)
+			.then(response => {
+				console.log(response)
+			})
+			.finally(() => {
+				this.uiAction?.disableRegisterButton(false)
+			})
 	}
 }
 

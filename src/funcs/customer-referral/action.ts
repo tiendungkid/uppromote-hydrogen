@@ -34,24 +34,6 @@ class CustomerReferralUIAction {
 		sessionStorage.setItem('closed_refer_customer', '1')
 	}
 
-	prepareRegister(
-		onCreatedCustomer: () => void,
-		onInvalidEmail: () => void,
-		onValidEmail: (email: string) => void
-	) {
-		if (!this.ui) return
-		if (this.ui.getInviteLinkButton.hasAttribute('data-created-affiliate')) {
-			onCreatedCustomer()
-			return
-		}
-		const email = this.ui.inviteInput.value
-		if (!email || !this.isValidEmail(email)) {
-			onInvalidEmail()
-			return
-		}
-		onValidEmail(email)
-	}
-
 	copyInviteLink() {
 		if (!this.ui) return
 		if (!this.setting) return
@@ -67,7 +49,12 @@ class CustomerReferralUIAction {
 		})
 	}
 
-	isValidEmail(email: string): boolean {
+	createdCustomer() {
+		return this.ui.getInviteLinkButton.hasAttribute('data-created-affiliate')
+	}
+
+	isValidEmail(): boolean {
+		const email = this.ui.inviteInput.value
 		return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,7})+$/.test(email)
 	}
 
@@ -78,6 +65,11 @@ class CustomerReferralUIAction {
 
 	getEmail(): string {
 		return this.ui.inviteInput.value
+	}
+
+	disableRegisterButton(disable = true) {
+		this.ui.getInviteLinkButton.disabled = disable
+		this.ui.getInviteLinkButton.style.cursor = disable ? 'wait' : 'pointer'
 	}
 }
 
