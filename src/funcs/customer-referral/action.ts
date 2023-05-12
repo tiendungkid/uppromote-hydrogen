@@ -67,6 +67,18 @@ class CustomerReferralUIAction {
 		return this.ui.inviteInput.value
 	}
 
+	setReferralLink(value: string) {
+		this.ui.inviteInput.value = value
+		this.ui.inviteInput.type = 'text'
+		this.ui.inviteInput.setAttribute('readonly', '')
+		this.ui.getInviteLinkButton.setAttribute('data-created-affiliate', 'true')
+		this.ui.getInviteLinkButton.textContent = this.setting.design.refer_customer_invite.button_copy_invite
+	}
+
+	appendShareContainer(shareContainer: HTMLDivElement){
+		this.ui.inviteContentContainer.append(shareContainer)
+	}
+
 	disableRegisterButton(disable = true) {
 		this.ui.getInviteLinkButton.disabled = disable
 		this.ui.getInviteLinkButton.style.cursor = disable ? 'wait' : 'pointer'

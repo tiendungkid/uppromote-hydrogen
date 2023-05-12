@@ -20,12 +20,14 @@ export default class UppromoteCore {
 	protected readonly uppromoteHelper: UppromoteHelpers
 	protected readonly uppromoteApi: UppromoteApi
 	protected cart?: Cart
+	private onAffiliateTracked: Array<(trackingVars: TrackingAffiliateResponse) => void>
 
 	constructor() {
 		this.uppromoteLink = new UppromoteLink
 		this.uppromoteCookie = new UppromoteCookie
 		this.uppromoteHelper = new UppromoteHelpers
 		this.uppromoteApi = new UppromoteApi
+		this.onAffiliateTracked = []
 	}
 
 	public run() {
@@ -153,6 +155,9 @@ export default class UppromoteCore {
 						window.dispatchEvent(customEvent)
 					}
 				})
+			this.onAffiliateTracked?.forEach(callback => {
+				callback(response)
+			})
 			return
 		}
 	}
@@ -175,5 +180,9 @@ export default class UppromoteCore {
 		const parentAffiliate = this.uppromoteCookie.get(COOKIE_AFFILIATE_ID)
 		if (!enableAssignDownLineAffiliate || !parentAffiliate) return null
 		return parentAffiliate
+	}
+
+	public addTrackedAffiliateCallback(callback: (trackingVars: TrackingAffiliateResponse)=> void) {
+		this.onAffiliateTracked?.push(callback)
 	}
 }

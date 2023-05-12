@@ -3,13 +3,12 @@ import CustomerReferralSetting, {
 	// CustomerReferralProgramSetting
 } from '../../types/customer-referral-setting'
 import CustomerReferralUi from '../../types/customer-referral-ui'
+import {CustomerReferralShareIcons} from './share-icons'
 
 class CustomerReferralRenderer {
-	// private readonly generalSetting: CustomerReferralProgramSetting
 	private readonly designSetting: CustomerReferralDesignSetting
 
 	constructor(setting: CustomerReferralSetting) {
-		// this.generalSetting = setting.program
 		this.designSetting = setting.design
 	}
 
@@ -38,6 +37,7 @@ class CustomerReferralRenderer {
 			closeButton: closeButtonIcon,
 			inviteContainer,
 			closeInvitePopupButton: closeButton,
+			inviteContentContainer: inviteContentContainer as HTMLDivElement,
 			inviteInput: input as HTMLInputElement,
 			errorText,
 			getInviteLinkButton: inputAddon as HTMLButtonElement
@@ -155,6 +155,24 @@ class CustomerReferralRenderer {
 			'p',
 			['sca_aff_customer_invite_error']
 		)
+	}
+
+	shareContainer(shareLink: string) {
+		const icons = CustomerReferralShareIcons(encodeURIComponent(shareLink))
+		const container = this.renderElement('div', ['sca_aff_customer_invite_share_container'])
+		icons.forEach(icon => {
+			const link = this.renderElement('a', [], {
+				href: icon.link,
+				target: '_blank'
+			})
+			const image = this.renderElement('img', [], {
+				src: icon.icon,
+				alt: icon.alt
+			})
+			link.append(image)
+			container.append(link)
+		})
+		return container as HTMLDivElement
 	}
 }
 

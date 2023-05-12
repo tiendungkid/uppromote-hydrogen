@@ -12,3 +12,6 @@ export const COOKIE_AFFILIATE_PERSONAL_DETAIL = 'scaaf_pd'
 export const COOKIE_ENABLE_ASSIGN_DOWN_LINE = 'scaaf_ass_dl'
 export const COOKIE_UPPROMOTE_CART_TOKEN = 'scaaf_ctk'
 export const COOKIE_APPLIED_COUPON = 'sca_coupon'
+
+// CUSTOMER REFERRAL
+export const COOKIE_CUSTOMER_REFERRAL_LINK = 'scaaf_refer_customer_link'

@@ -51,4 +51,11 @@ export default class UppromoteHelpers {
 		console.log(content)
 		this.logger('[Tracking affiliate] Finish log error.')
 	}
+
+	transformReferralLinkToHydrogenLink(referralLink: string) {
+		const originURL = new URL(referralLink)
+		originURL.host = window.location.host
+		originURL.protocol = window.location.protocol
+		return originURL.toString()
+	}
 }

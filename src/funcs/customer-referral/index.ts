@@ -5,6 +5,9 @@ import UppromoteCookie from '../uppromote-cookie'
 import CustomerReferralRenderer from './renderer'
 import CustomerReferralUi from '../../types/customer-referral-ui'
 import CustomerReferralUIAction from './action'
+import {COOKIE_CUSTOMER_REFERRAL_LINK} from '../../constants/cookie'
+import {clearInterval} from 'timers'
+import TrackingAffiliateResponse, {TrackingAffiliateResponseStatus} from '../../types/tracking-affiliate-response'
 
 class UppromoteCustomerReferral {
 	protected readonly uppromoteApi: UppromoteApi
@@ -14,6 +17,7 @@ class UppromoteCustomerReferral {
 	protected setting: CustomerReferralSetting | null
 	protected ui: CustomerReferralUi | null
 	protected uiAction: CustomerReferralUIAction | null
+	protected finishedLoadSetting = false
 
 	constructor() {
 		this.uppromoteApi = new UppromoteApi()
@@ -27,7 +31,11 @@ class UppromoteCustomerReferral {
 	run() {
 		this.uppromoteApi
 			.getCustomerReferralSetting()
-			.then(setting => this.render(setting))
+			.then(setting => {
+				this.render(setting)
+				this.applyRegisterStatus()
+				this.finishedLoadSetting = true
+			})
 	}
 
 	render(setting: CustomerReferralSetting): void {
@@ -88,11 +96,54 @@ class UppromoteCustomerReferral {
 		this.uppromoteApi
 			.postRegisterCustomerReferral(email)
 			.then(response => {
-				console.log(response)
+				const uiAction = this.uiAction
+				const renderer = this.renderer
+				if (!uiAction || !renderer) return
+				if (response.error) {
+					uiAction.renderErrorMessage(response.error)
+					return
+				}
+				const shareLink = this.uppromoteHelper.transformReferralLinkToHydrogenLink(response.data)
+				uiAction.setReferralLink(shareLink)
+				const shareContainer = renderer.shareContainer(shareLink)
+				shareContainer && uiAction.appendShareContainer(shareContainer)
+				this.setRegisterStatus(shareLink)
 			})
 			.finally(() => {
 				this.uiAction?.disableRegisterButton(false)
 			})
+	}
+
+	private setRegisterStatus(shareLink: string) {
+		this.uppromoteCookie.set(COOKIE_CUSTOMER_REFERRAL_LINK, shareLink, 365)
+	}
+
+	private applyRegisterStatus() {
+		if (!this.ui || this.uppromoteCookie.isClosedCustomerReferral()) return
+		const inviteLink = this.uppromoteCookie.get(COOKIE_CUSTOMER_REFERRAL_LINK)
+		if (!inviteLink) return
+		this.uiAction?.setReferralLink(inviteLink)
+		const shareContainer = this.renderer?.shareContainer(inviteLink)
+		shareContainer && this.uiAction?.appendShareContainer(shareContainer)
+	}
+
+	public onAffiliateTracked(trackingVars: TrackingAffiliateResponse) {
+		const action = () => {
+			if (trackingVars.status !== TrackingAffiliateResponseStatus.SUCCESS) return
+			console.log(123)
+		}
+		this.waitSetting(action)
+	}
+
+	private waitSetting(onLoaded: () => void, onTimeout?: () => void) {
+		const interval = setInterval(() => {
+			if (this.finishedLoadSetting) onLoaded()
+			clearInterval(interval)
+		}, 100)
+		setTimeout(() => {
+			clearInterval(interval)
+			onTimeout && onTimeout()
+		}, 5e3)
 	}
 }
 

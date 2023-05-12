@@ -4,6 +4,7 @@ export default interface CustomerReferralUi {
     closeButton: HTMLElement | HTMLSpanElement
     inviteContainer: HTMLElement | HTMLDivElement
     closeInvitePopupButton: HTMLElement | HTMLButtonElement
+    inviteContentContainer: HTMLDivElement
     inviteInput: HTMLInputElement
     getInviteLinkButton: HTMLButtonElement
     errorText: HTMLElement | HTMLParagraphElement

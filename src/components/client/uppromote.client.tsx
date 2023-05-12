@@ -15,6 +15,7 @@ function Uppromote(props: Props) {
 			const uppromoteCustomerReferral = new UppromoteCustomerReferral
 			uppromoteCore.run()
 			uppromoteCustomerReferral.run()
+			uppromoteCore.addTrackedAffiliateCallback(uppromoteCustomerReferral.onAffiliateTracked)
 			cart && uppromoteCore.setCart(cart)
 		}
 	})
