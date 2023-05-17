@@ -1,5 +1,5 @@
 import {IUppromoteShopConfig} from '../types/config'
-import * as data from './../uppromote.config.json'
+import * as data from '../../uppromote.config.json'
 
 function getShopConfig(): IUppromoteShopConfig {
 	const config: IUppromoteShopConfig = {

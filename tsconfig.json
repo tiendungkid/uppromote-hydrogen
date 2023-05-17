@@ -18,7 +18,8 @@
     "sourceMap": true,
     "rootDirs": [
       "./src",
-      "./"
+      "./",
+      "."
     ],
     "outDir": "./dist/esm",
     "strict": true,
