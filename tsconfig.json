@@ -16,7 +16,10 @@
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
-    "rootDir": "./src",
+    "rootDirs": [
+      "./src",
+      "./"
+    ],
     "outDir": "./dist/esm",
     "strict": true,
     "noImplicitReturns": true,
