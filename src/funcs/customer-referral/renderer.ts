@@ -2,7 +2,7 @@ import CustomerReferralSetting, {
 	CustomerReferralDesignSetting,
 	// CustomerReferralProgramSetting
 } from '../../types/customer-referral-setting'
-import CustomerReferralUi from '../../types/customer-referral-ui'
+import CustomerReferralUi, {CustomerReferralShopNowUi} from '../../types/customer-referral-ui'
 import {CustomerReferralShareIcons} from './share-icons'
 
 class CustomerReferralRenderer {
@@ -173,6 +173,60 @@ class CustomerReferralRenderer {
 			container.append(link)
 		})
 		return container as HTMLDivElement
+	}
+
+	protected overlayShopNow() {
+		return this.renderElement('div', ['sca_aff_customer_refer_shop_now_overlay'])
+	}
+
+	protected containerShopNow() {
+		return this.renderElement('div', ['sca_aff_customer_refer_shop_now_container'])
+	}
+
+	protected closeShopNow() {
+		const button = this.renderElement('button', ['sca_aff_customer_refer_close_shop_now_button'], {
+			type: 'button'
+		}) as HTMLButtonElement
+		button.innerHTML = '&times;'
+		return button
+	}
+
+	protected headerShopNow() {
+		const header = this.renderElement('div', ['sca_aff_customer_refer_shop_now_header'])
+		header.innerHTML = this.designSetting.refer_customer_incentive_popup.shop_header
+		return header
+	}
+
+	contentShopNow() {
+		const content = this.renderElement('div', ['sca_aff_customer_refer_shop_now_content'])
+		content.innerHTML = this.designSetting.refer_customer_incentive_popup.shop_description
+		return content
+	}
+
+	shopNowButton() {
+		const button = this.renderElement('button', ['sca_aff_customer_refer_shop_now_button'])
+		button.innerText = this.designSetting.refer_customer_incentive_popup.shop_button_text
+		button.style.backgroundColor = this.designSetting.refer_customer_incentive_popup.shop_background_color
+		button.style.color = this.designSetting.refer_customer_incentive_popup.shop_text_color
+		return button
+	}
+
+	renderShopNow(): CustomerReferralShopNowUi {
+		const overlay = this.overlayShopNow()
+		const container = this.containerShopNow()
+		const closeButton = this.closeShopNow()
+		const header = this.headerShopNow()
+		const content = this.contentShopNow()
+		const shopNow = this.shopNowButton()
+		container.append(closeButton, header, content, shopNow)
+		overlay.append(container)
+		document.body.append(overlay)
+		return {
+			overlay,
+			container,
+			closeButton,
+			shopNowButton: shopNow
+		}
 	}
 }
 

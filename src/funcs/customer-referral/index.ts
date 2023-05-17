@@ -6,7 +6,6 @@ import CustomerReferralRenderer from './renderer'
 import CustomerReferralUi from '../../types/customer-referral-ui'
 import CustomerReferralUIAction from './action'
 import {COOKIE_CUSTOMER_REFERRAL_LINK} from '../../constants/cookie'
-import {clearInterval} from 'timers'
 import TrackingAffiliateResponse, {TrackingAffiliateResponseStatus} from '../../types/tracking-affiliate-response'
 
 class UppromoteCustomerReferral {
@@ -128,23 +127,19 @@ class UppromoteCustomerReferral {
 	}
 
 	public onAffiliateTracked(trackingVars: TrackingAffiliateResponse) {
-		const action = () => {
-			if (trackingVars.status !== TrackingAffiliateResponseStatus.SUCCESS) return
-			console.log(123)
-		}
-		this.waitSetting(action)
+		if (trackingVars.status !== TrackingAffiliateResponseStatus.SUCCESS) return
+		const interval = setInterval(() => {
+			if (this.setting) {
+				clearInterval(interval)
+				if (this.uppromoteHelper.isCustomerReferralProgram(trackingVars.program_id, this.setting.program.program)) {
+					const ui = this.renderer?.renderShopNow()
+					if (ui) this.uiAction?.onCloseShopNow(ui)
+				}
+			}
+		}, 100)
+		setTimeout(() => clearInterval(interval), 5e3)
 	}
 
-	private waitSetting(onLoaded: () => void, onTimeout?: () => void) {
-		const interval = setInterval(() => {
-			if (this.finishedLoadSetting) onLoaded()
-			clearInterval(interval)
-		}, 100)
-		setTimeout(() => {
-			clearInterval(interval)
-			onTimeout && onTimeout()
-		}, 5e3)
-	}
 }
 
 export default UppromoteCustomerReferral

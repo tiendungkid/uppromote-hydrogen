@@ -9,3 +9,10 @@ export default interface CustomerReferralUi {
     getInviteLinkButton: HTMLButtonElement
     errorText: HTMLElement | HTMLParagraphElement
 }
+
+export interface CustomerReferralShopNowUi {
+    overlay: HTMLDivElement | HTMLElement
+    container: HTMLDivElement| HTMLElement
+    closeButton: HTMLElement | HTMLButtonElement
+    shopNowButton: HTMLElement | HTMLButtonElement
+}

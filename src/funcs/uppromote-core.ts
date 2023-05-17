@@ -55,6 +55,7 @@ export default class UppromoteCore {
 		const uppromoteCartToken = this.uppromoteCookie.get(COOKIE_UPPROMOTE_CART_TOKEN)
 		const userAgent = this.uppromoteLink.getUserAgent()
 		if (!trackingId || !affiliateId || !expire_at) return
+		this.uppromoteCookie.setUppromoteCartId(shopifyCartId)
 		this.applyCouponCode()
 		if (this.uppromoteHelper.needPostCartToken(
 			shopifyCartId,
@@ -63,7 +64,6 @@ export default class UppromoteCore {
 			affiliateId,
 			expire_at
 		)) {
-			this.uppromoteCookie.setUppromoteCartId(shopifyCartId)
 			this.uppromoteApi
 				.postCartToken(affiliateId, trackingId, shopifyCartId, userAgent)
 				.then()

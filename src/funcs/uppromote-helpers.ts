@@ -58,4 +58,14 @@ export default class UppromoteHelpers {
 		originURL.protocol = window.location.protocol
 		return originURL.toString()
 	}
+
+	isCustomerReferralProgram(trackedProgramId: number, customerReferralProgramId: string): boolean {
+		try {
+			const customerReferralProgram = parseInt(atob(customerReferralProgramId))
+			return trackedProgramId === customerReferralProgram
+		} catch (e) {
+			console.error(e)
+			return false
+		}
+	}
 }

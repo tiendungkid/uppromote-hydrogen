@@ -1,4 +1,4 @@
-import CustomerReferralUi from '../../types/customer-referral-ui'
+import CustomerReferralUi, {CustomerReferralShopNowUi} from '../../types/customer-referral-ui'
 import CustomerReferralSetting from '../../types/customer-referral-setting'
 
 class CustomerReferralUIAction {
@@ -75,13 +75,31 @@ class CustomerReferralUIAction {
 		this.ui.getInviteLinkButton.textContent = this.setting.design.refer_customer_invite.button_copy_invite
 	}
 
-	appendShareContainer(shareContainer: HTMLDivElement){
+	appendShareContainer(shareContainer: HTMLDivElement) {
 		this.ui.inviteContentContainer.append(shareContainer)
 	}
 
 	disableRegisterButton(disable = true) {
 		this.ui.getInviteLinkButton.disabled = disable
 		this.ui.getInviteLinkButton.style.cursor = disable ? 'wait' : 'pointer'
+	}
+
+	onCloseShopNow(ui: CustomerReferralShopNowUi) {
+		const onClose = (e: any) => {
+			const classList = e.target.classList
+			if (
+				classList.contains('sca_aff_customer_refer_shop_now_overlay') ||
+                classList.contains('sca_aff_customer_refer_close_shop_now_button') ||
+                classList.contains('sca_aff_customer_refer_shop_now_button')
+			) {
+				ui.container.style.animationName = 'fadeOutUp'
+				ui.overlay.style.animationName = 'fadeOut'
+				setTimeout(() => {
+					ui.overlay.style.display = 'none'
+				}, 500)
+			}
+		}
+		ui.overlay.addEventListener('click', onClose)
 	}
 }
 
