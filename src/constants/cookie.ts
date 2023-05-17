@@ -15,3 +15,4 @@ export const COOKIE_APPLIED_COUPON = 'sca_coupon'
 
 // CUSTOMER REFERRAL
 export const COOKIE_CUSTOMER_REFERRAL_LINK = 'scaaf_refer_customer_link'
+export const COOKIE_IS_CUSTOMER_REFERRAL_PROGRAM = 'scaaf_is_program_customer'

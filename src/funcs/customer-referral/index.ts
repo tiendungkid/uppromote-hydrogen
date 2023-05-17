@@ -5,7 +5,7 @@ import UppromoteCookie from '../uppromote-cookie'
 import CustomerReferralRenderer from './renderer'
 import CustomerReferralUi from '../../types/customer-referral-ui'
 import CustomerReferralUIAction from './action'
-import {COOKIE_CUSTOMER_REFERRAL_LINK} from '../../constants/cookie'
+import {COOKIE_CUSTOMER_REFERRAL_LINK, COOKIE_IS_CUSTOMER_REFERRAL_PROGRAM} from '../../constants/cookie'
 import TrackingAffiliateResponse, {TrackingAffiliateResponseStatus} from '../../types/tracking-affiliate-response'
 
 class UppromoteCustomerReferral {
@@ -132,6 +132,7 @@ class UppromoteCustomerReferral {
 			if (this.setting) {
 				clearInterval(interval)
 				if (this.uppromoteHelper.isCustomerReferralProgram(trackingVars.program_id, this.setting.program.program)) {
+					this.uppromoteCookie.set(COOKIE_IS_CUSTOMER_REFERRAL_PROGRAM, '1')
 					const ui = this.renderer?.renderShopNow()
 					if (ui) this.uiAction?.onCloseShopNow(ui)
 				}

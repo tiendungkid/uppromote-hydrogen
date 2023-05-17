@@ -8,6 +8,7 @@ import {
 	COOKIE_CLICK_TIME, COOKIE_ENABLE_ASSIGN_DOWN_LINE, COOKIE_EXPIRES_TIME,
 	COOKIE_RECEIVED, COOKIE_TRACKING_ID, COOKIE_UPPROMOTE_CART_TOKEN
 } from '../constants/cookie'
+import {MessageBarAffiliateInfo} from '../types/message-bar-setting'
 
 export default class UppromoteCookie {
 	private cookieService: Cookies
@@ -78,5 +79,14 @@ export default class UppromoteCookie {
 
 	isClosedCustomerReferral(): boolean {
 		return !!sessionStorage.getItem('closed_refer_customer')
+	}
+
+	getMessageBarAffiliateInfo(): MessageBarAffiliateInfo {
+		return {
+			name: this.get(COOKIE_AFFILIATE_NAME),
+			first_name: this.get(COOKIE_AFFILIATE_FIRST_NAME),
+			company: this.get(COOKIE_AFFILIATE_COMPANY),
+			personal_detail: this.get(COOKIE_AFFILIATE_PERSONAL_DETAIL)
+		}
 	}
 }

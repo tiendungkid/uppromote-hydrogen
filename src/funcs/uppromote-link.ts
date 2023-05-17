@@ -13,6 +13,10 @@ export default class UppromoteLink {
 		)
 	}
 
+	getSearch(): URLSearchParams {
+		return this.url.searchParams
+	}
+
 	getHashCode() {
 		return this.url.searchParams.get(
 			this.hashCodeParamName

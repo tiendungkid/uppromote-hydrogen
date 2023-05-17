@@ -7,6 +7,7 @@ import {createStorefrontClient} from '@shopify/hydrogen-react'
 import {CART_DISCOUNT_CODES_UPDATE} from '../queries/cart-discount-codes-update'
 import {getGraphqlIdByCartId} from '../utils/cart'
 import CustomerReferralSetting from '../types/customer-referral-setting'
+import MessageBarSetting from '../types/message-bar-setting'
 
 export default class UppromoteApi {
 
@@ -148,6 +149,17 @@ export default class UppromoteApi {
 		const fileName = uppromoteShopConfig.shopify.shopDomain.replaceAll('.myshopify.com', '') + '.json?v=' + currentTime
 		const response = await this.fetcher(
 			this.getFullCdnLinkPath(`storage/uploads/customer_referral_settings/${fileName}`),
+			'GET',
+			{}
+		)
+		return await response
+	}
+
+	public async getMessageBarSetting(): Promise<MessageBarSetting> {
+		const currentTime = new Date().getTime()
+		const fileName = uppromoteShopConfig.shopify.shopDomain.replaceAll('.myshopify.com', '') + '.json?v=' + currentTime
+		const response = await this.fetcher(
+			this.getFullCdnLinkPath(`storage/uploads/message_bar_settings/${fileName}`),
 			'GET',
 			{}
 		)
