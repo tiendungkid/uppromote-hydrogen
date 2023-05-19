@@ -12,6 +12,10 @@ class CustomerReferralRenderer {
 		this.designSetting = setting.design
 	}
 
+	rendered() {
+		return document.querySelectorAll('.sca_aff_customer_refer_container')
+	}
+
 	renderCustomerReferral(): CustomerReferralUi {
 		const container = this.container()
 		const button = this.button()

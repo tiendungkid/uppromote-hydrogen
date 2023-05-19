@@ -41,9 +41,11 @@ class UppromoteCustomerReferral {
 		if (!setting || !setting.program.active || this.uppromoteCookie.isClosedCustomerReferral()) return
 		this.setting = setting
 		this.renderer = new CustomerReferralRenderer(setting)
-		this.uppromoteHelper.loadCustomerReferralStyle()
-		this.ui = this.renderer.renderCustomerReferral()
-		this.addEventListener()
+		if (this.renderer.rendered().length === 0) {
+			this.uppromoteHelper.loadCustomerReferralStyle()
+			this.ui = this.renderer.renderCustomerReferral()
+			this.addEventListener()
+		}
 	}
 
 	private addEventListener() {

@@ -5,7 +5,11 @@ import UppromoteCustomerReferral from '../../funcs/customer-referral'
 import UppromoteMessageBar from '../../funcs/message-bar'
 
 interface Props {
-    cart?: Cart
+    cart?: Cart,
+	publicStorefrontApiToken?: string,
+	publicStorefrontApiVersion?: string,
+	publicStoreDomain?: string,
+	uppromoteAccessToken?: string
 }
 
 function Uppromote(props: Props) {
