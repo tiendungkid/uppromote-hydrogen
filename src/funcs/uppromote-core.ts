@@ -5,7 +5,7 @@ import {LocalTrackingVariables, Received} from '../types/cookies'
 import UppromoteHelpers from './uppromote-helpers'
 import {
 	COOKIE_AFFILIATE_ID, COOKIE_APPLIED_COUPON,
-	COOKIE_CLICK_TIME, COOKIE_ENABLE_ASSIGN_DOWN_LINE, COOKIE_EXPIRES_TIME,
+	COOKIE_CLICK_TIME, COOKIE_EXPIRES_TIME,
 	COOKIE_TRACKING_ID,
 	COOKIE_UPPROMOTE_CART_TOKEN
 } from '../constants/cookie'
@@ -50,14 +50,14 @@ export default class UppromoteCore {
 	}
 
 	protected resolveCartToken(shopifyCartId: string) {
+		this.uppromoteCookie.setUppromoteCartId(shopifyCartId)
 		const affiliateId = this.uppromoteCookie.get(COOKIE_AFFILIATE_ID)
 		const trackingId = this.uppromoteCookie.get(COOKIE_TRACKING_ID)
 		const expire_at = this.uppromoteCookie.get(COOKIE_EXPIRES_TIME)
 		const uppromoteCartToken = this.uppromoteCookie.get(COOKIE_UPPROMOTE_CART_TOKEN)
 		const userAgent = this.uppromoteLink.getUserAgent()
 		if (!trackingId || !affiliateId || !expire_at) return
-		this.uppromoteCookie.setUppromoteCartId(shopifyCartId)
-		this.applyCouponCode()
+		this.applyCouponCode(shopifyCartId)
 		if (this.uppromoteHelper.needPostCartToken(
 			shopifyCartId,
 			uppromoteCartToken,
@@ -163,24 +163,17 @@ export default class UppromoteCore {
 		}
 	}
 
-	protected applyCouponCode() {
+	protected applyCouponCode(cartId?: string) {
 		const couponCookie: AppliedCoupon | null = this.uppromoteCookie.get(COOKIE_APPLIED_COUPON)
-		if (!couponCookie) return
-		if (!couponCookie.coupon || couponCookie.applied) return
+		if (!couponCookie || !couponCookie.coupon || couponCookie.applied) return
 		const uppromoteCartId = this.uppromoteCookie.get(COOKIE_UPPROMOTE_CART_TOKEN)
-		if (!uppromoteCartId) return
+		cartId = cartId ?? uppromoteCartId
+		if (!cartId) return
 		this.uppromoteApi
-			.applyDiscountCode(uppromoteCartId, couponCookie.coupon)
+			.applyDiscountCode(cartId, couponCookie.coupon)
 			.then(() => {
 				this.uppromoteCookie.setAppliedCoupon(couponCookie.coupon, true)
 			})
-	}
-
-	generateParentAffiliate(): string | null {
-		const enableAssignDownLineAffiliate = this.uppromoteCookie.get(COOKIE_ENABLE_ASSIGN_DOWN_LINE)
-		const parentAffiliate = this.uppromoteCookie.get(COOKIE_AFFILIATE_ID)
-		if (!enableAssignDownLineAffiliate || !parentAffiliate) return null
-		return parentAffiliate
 	}
 
 	public addTrackedAffiliateCallback(callback: (trackingVars: TrackingAffiliateResponse)=> void) {
