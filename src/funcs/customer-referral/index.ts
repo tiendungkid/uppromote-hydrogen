@@ -7,6 +7,7 @@ import CustomerReferralUi from '../../types/customer-referral-ui'
 import CustomerReferralUIAction from './action'
 import {COOKIE_CUSTOMER_REFERRAL_LINK, COOKIE_IS_CUSTOMER_REFERRAL_PROGRAM} from '../../constants/cookie'
 import TrackingAffiliateResponse, {TrackingAffiliateResponseStatus} from '../../types/tracking-affiliate-response'
+import UppromoteCredential from '../../types/credential'
 
 class UppromoteCustomerReferral {
 	protected readonly uppromoteApi: UppromoteApi
@@ -18,8 +19,8 @@ class UppromoteCustomerReferral {
 	protected uiAction: CustomerReferralUIAction | null
 	protected finishedLoadSetting = false
 
-	constructor() {
-		this.uppromoteApi = new UppromoteApi()
+	constructor(credentials: UppromoteCredential) {
+		this.uppromoteApi = new UppromoteApi(credentials)
 		this.uppromoteHelper = new UppromoteHelpers()
 		this.uppromoteCookie = new UppromoteCookie()
 		this.uiAction = null

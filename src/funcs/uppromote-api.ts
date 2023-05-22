@@ -2,14 +2,21 @@ import {LocalTrackingVariables} from '../types/cookies'
 import TrackingAffiliateResponse from '../types/tracking-affiliate-response'
 import {AffiliateCouponResponse, RegisterCustomerReferralResponse} from '../types/response'
 import {uppromoteAppConfig} from '../config/uppromote.app.config'
-import {uppromoteShopConfig} from '../config/uppromote.shop.config'
 import {createStorefrontClient} from '@shopify/hydrogen-react'
 import {CART_DISCOUNT_CODES_UPDATE} from '../queries/cart-discount-codes-update'
 import {getGraphqlIdByCartId} from '../utils/cart'
 import CustomerReferralSetting from '../types/customer-referral-setting'
 import MessageBarSetting from '../types/message-bar-setting'
+import UppromoteCredential from '../types/credential'
 
 export default class UppromoteApi {
+
+	private credential: UppromoteCredential
+
+	constructor(credential: UppromoteCredential) {
+		this.credential = credential
+	}
+
 
 	protected getFullLinkByPath(path: string): string {
 		const slashed = path.charAt(0) === '/' ? '' : '/'
@@ -59,7 +66,7 @@ export default class UppromoteApi {
 			{
 				aid: String(trackingVars.affiliateId),
 				hc: trackingVars.hashcode,
-				s: uppromoteShopConfig.shopify.shopDomain,
+				s: this.credential.storeDomain,
 				tid: String(trackingVars.trackingId) || null,
 				ug: trackingVars.useragent
 			})
@@ -73,7 +80,7 @@ export default class UppromoteApi {
 			'GET',
 			{
 				aid: String(affiliateId),
-				shopify_domain: uppromoteShopConfig.shopify.shopDomain
+				shopify_domain: this.credential.storeDomain
 			}
 		)
 		return await response
@@ -92,9 +99,9 @@ export default class UppromoteApi {
 				aid: affiliateId,
 				tid: trackingId,
 				ctk: cartId,
-				s: uppromoteShopConfig.shopify.shopDomain.replace('.myshopify.com', ''),
+				s: this.credential.storeDomain.replace('.myshopify.com', ''),
 				ug: userAgent,
-				shopify_domain: uppromoteShopConfig.shopify.shopDomain
+				shopify_domain: this.credential.storeDomain
 			}
 		)
 		return await response
@@ -122,9 +129,9 @@ export default class UppromoteApi {
         getPublicTokenHeaders: () => Record<string, string>
         } {
 		const client = createStorefrontClient({
-			publicStorefrontToken: uppromoteShopConfig.shopify.storefrontAccessToken,
-			storeDomain: `https://${uppromoteShopConfig.shopify.shopDomain}`,
-			storefrontApiVersion: uppromoteShopConfig.shopify.storefrontApiVersion
+			publicStorefrontToken: this.credential.publicStorefrontToken,
+			storeDomain: `https://${this.credential.storeDomain}`,
+			storefrontApiVersion: this.credential.storefrontApiVersion
 		})
 		return {
 			getStorefrontApiUrl: client.getStorefrontApiUrl,
@@ -138,7 +145,7 @@ export default class UppromoteApi {
 			'GET',
 			{
 				aff_id: String(affiliateId),
-				shop: uppromoteShopConfig.shopify.shopDomain
+				shop: this.credential.storeDomain
 			}
 		)
 		return await response
@@ -146,7 +153,7 @@ export default class UppromoteApi {
 
 	public async getCustomerReferralSetting(): Promise<CustomerReferralSetting> {
 		const currentTime = new Date().getTime()
-		const fileName = uppromoteShopConfig.shopify.shopDomain.replaceAll('.myshopify.com', '') + '.json?v=' + currentTime
+		const fileName = this.credential.storeDomain.replaceAll('.myshopify.com', '') + '.json?v=' + currentTime
 		const response = await this.fetcher(
 			this.getFullCdnLinkPath(`storage/uploads/customer_referral_settings/${fileName}`),
 			'GET',
@@ -157,7 +164,7 @@ export default class UppromoteApi {
 
 	public async getMessageBarSetting(): Promise<MessageBarSetting> {
 		const currentTime = new Date().getTime()
-		const fileName = uppromoteShopConfig.shopify.shopDomain.replaceAll('.myshopify.com', '') + '.json?v=' + currentTime
+		const fileName = this.credential.storeDomain.replaceAll('.myshopify.com', '') + '.json?v=' + currentTime
 		const response = await this.fetcher(
 			this.getFullCdnLinkPath(`storage/uploads/message_bar_settings/${fileName}`),
 			'GET',
@@ -172,8 +179,8 @@ export default class UppromoteApi {
 			'POST',
 			{
 				email,
-				shop: uppromoteShopConfig.shopify.shopDomain,
-				shopify_domain: uppromoteShopConfig.shopify.shopDomain
+				shop: this.credential.storeDomain,
+				shopify_domain: this.credential.storeDomain
 			}
 		)
 		return await response

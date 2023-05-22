@@ -1,11 +1,13 @@
 import ReferralLinkParams from '../types/referral-link-params'
-import {uppromoteShopConfig} from '../config/uppromote.shop.config'
+import UppromoteCredential from '../types/credential'
 
 export default class UppromoteLink {
+	private credential: UppromoteCredential
 	private readonly hashCodeParamName: string = 'sca_ref'
 	protected url: URL
 
-	constructor() {
+	constructor(credentials: UppromoteCredential) {
+		this.credential = credentials
 		if (typeof window === 'undefined')
 			throw new Error('Not found window property.')
 		this.url = new URL(
@@ -38,7 +40,7 @@ export default class UppromoteLink {
 		] = [
 			this.getAffiliateId(),
 			this.getHash(),
-			uppromoteShopConfig.shopify.shopDomain,
+			this.credential.storeDomain,
 			this.getUserAgent(),
 			null,
 			this.getSource()

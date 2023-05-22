@@ -5,6 +5,7 @@ import {COOKIE_IS_CUSTOMER_REFERRAL_PROGRAM} from '../../constants/cookie'
 import UppromoteLink from '../uppromote-link'
 import MessageBarRenderer from './renderer'
 import MessageBarSetting from '../../types/message-bar-setting'
+import UppromoteCredential from '../../types/credential'
 
 class UppromoteMessageBar {
 	protected readonly uppromoteApi: UppromoteApi
@@ -13,10 +14,10 @@ class UppromoteMessageBar {
 	protected renderer: MessageBarRenderer | undefined
 	protected setting: MessageBarSetting | undefined
 
-	constructor() {
-		this.uppromoteApi = new UppromoteApi()
-		this.uppromoteCookie = new UppromoteCookie()
-		this.uppromoteLink = new UppromoteLink()
+	constructor(credential: UppromoteCredential) {
+		this.uppromoteApi = new UppromoteApi(credential)
+		this.uppromoteCookie = new UppromoteCookie
+		this.uppromoteLink = new UppromoteLink(credential)
 	}
 
 	run() {

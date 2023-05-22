@@ -13,6 +13,7 @@ import UppromoteApi from './uppromote-api'
 import TrackingAffiliateResponse, {TrackingAffiliateResponseStatus} from '../types/tracking-affiliate-response'
 import {getCartIdByGraphqlId} from '../utils/cart'
 import AppliedCoupon from '../types/applied-coupon'
+import UppromoteCredential from '../types/credential'
 
 export default class UppromoteCore {
 	private readonly uppromoteCookie: UppromoteCookie
@@ -22,11 +23,11 @@ export default class UppromoteCore {
 	protected cart?: Cart
 	private onAffiliateTracked: Array<(trackingVars: TrackingAffiliateResponse) => void>
 
-	constructor() {
-		this.uppromoteLink = new UppromoteLink
+	constructor(credentials: UppromoteCredential) {
+		this.uppromoteLink = new UppromoteLink(credentials)
 		this.uppromoteCookie = new UppromoteCookie
 		this.uppromoteHelper = new UppromoteHelpers
-		this.uppromoteApi = new UppromoteApi
+		this.uppromoteApi = new UppromoteApi(credentials)
 		this.onAffiliateTracked = []
 	}
 
