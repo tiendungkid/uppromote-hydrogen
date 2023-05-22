@@ -156,6 +156,9 @@ export default class UppromoteCore {
 						window.dispatchEvent(customEvent)
 					}
 				})
+			window.dispatchEvent(new CustomEvent('uppromote:tracked-affiliate', {
+				detail: response
+			}))
 			this.onAffiliateTracked?.forEach(callback => {
 				callback(response)
 			})
@@ -176,7 +179,7 @@ export default class UppromoteCore {
 			})
 	}
 
-	public addTrackedAffiliateCallback(callback: (trackingVars: TrackingAffiliateResponse)=> void) {
+	public addTrackedAffiliateCallback(callback: (trackingVars: TrackingAffiliateResponse) => void) {
 		this.onAffiliateTracked?.push(callback)
 	}
 }
