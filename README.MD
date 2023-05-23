@@ -80,7 +80,7 @@ Create a new local development server to start testing your changes.
 </html>
 ```
 
-- Fill your token information to Uppromote component. You need to provide `Cart` for the app to work. Read this document to 
+- Fill your token information to Uppromote component. You need to provide `Cart` for the app to work. Read the [documentation](https://shopify.dev/docs/custom-storefronts/hydrogen/cart/fetch) to know how to fetch the Cart
 
 - You can get Uppromote Access Token in your [app setting](https://af.uppromote.com/admin/settings/integration)
 
