@@ -49,7 +49,7 @@ Create a new local development server to start testing your changes.
    ```
    The development environment will open at http://localhost:3000.
 
-### Step 4: Install Uppromote + Hydrogen Package
+### Step 4: Install Uppromote package
 
 1. Install Uppromote Package
    ```shell
