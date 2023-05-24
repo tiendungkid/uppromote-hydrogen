@@ -61,7 +61,7 @@ export default class UppromoteApi {
 		onError: (error: any) => void
 	) {
 		this.fetcher(
-			this.getFullLinkByPath('api/click_tracking'),
+			this.getFullLinkByPath('api/headless/click_tracking'),
 			'POST',
 			{
 				aid: String(trackingVars.affiliateId),
@@ -76,7 +76,7 @@ export default class UppromoteApi {
 
 	public async getCoupon(affiliateId: number | string): Promise<AffiliateCouponResponse> {
 		const response = await this.fetcher(
-			this.getFullLinkByPath('api/get_coupon'),
+			this.getFullLinkByPath('api/headless/get_coupon'),
 			'GET',
 			{
 				aid: String(affiliateId),
@@ -93,7 +93,7 @@ export default class UppromoteApi {
 		userAgent: string
 	) {
 		const response = await this.fetcher(
-			this.getFullLinkByPath('api/ctk'),
+			this.getFullLinkByPath('api/headless/ctk'),
 			'POST',
 			{
 				aid: affiliateId,
@@ -141,7 +141,7 @@ export default class UppromoteApi {
 
 	public async getFbPixel(affiliateId: string | number) {
 		const response = await this.fetcher(
-			this.getFullLinkByPath('api/get_fb_pixel'),
+			this.getFullLinkByPath('api/headless/get_fb_pixel'),
 			'GET',
 			{
 				aff_id: String(affiliateId),
@@ -175,7 +175,7 @@ export default class UppromoteApi {
 
 	public async postRegisterCustomerReferral(email: string): Promise<RegisterCustomerReferralResponse> {
 		const response = await this.fetcher(
-			this.getFullLinkByPath('api/refer-customer/register'),
+			this.getFullLinkByPath('api/headless/refer-customer/register'),
 			'POST',
 			{
 				email,
