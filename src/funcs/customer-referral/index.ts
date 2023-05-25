@@ -101,7 +101,7 @@ class UppromoteCustomerReferral {
 				const uiAction = this.uiAction
 				const renderer = this.renderer
 				if (!uiAction || !renderer) return
-				if (response.error) {
+				if (response.error || !response.data) {
 					uiAction.renderErrorMessage(response.error)
 					return
 				}
