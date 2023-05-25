@@ -37,7 +37,6 @@
     "build": "npm run build:esm && npm run build:cjs && npm run build:scss",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
-    "build:scss": "sass --no-source-map --style=compressed src:dist/cjs",
     "prepare": "npm run build"
   },
   "files": [
