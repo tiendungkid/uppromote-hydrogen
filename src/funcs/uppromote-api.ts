@@ -35,6 +35,7 @@ export default class UppromoteApi {
             [key: string]: string | null
         }
 	) {
+		body.token = this.credential.uppromoteAccessToken
 		const uri = new URL(url)
 		if (['GET', 'HEAD'].includes(method)) {
 			Object.keys(body).forEach(k => {
